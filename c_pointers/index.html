@@ -1,0 +1,2658 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-113384250-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-113384250-1');
+</script>
+
+<title>Learn coding by coding</title>
+<link rel="stylesheet" type="text/css" href="p.css">
+</head>
+<body>
+
+<!-- **************************************************TABLE 1******************************************************************************************************-->
+<table width=100% cellspacing=5 id="intro">
+
+<!-- *********************ROW 1*********************************-->
+<tr>
+<th> <h3></h3></th>
+<th>
+<div style="font-size:2em;font-variant:normal;font-weight:normal;font-family: Times New Roman, Times, serif;"><u><h1 align="center">Pointers in C/C++</h1></u></div>
+</th>
+
+<th ><h3></h3></th>
+</tr>
+
+<!--*********************ROW 2*************************************-->
+<tr>
+<td class="adv"></td>
+
+
+<td class="main">
+<h1 align="center"><u>Basics</u></h1>
+<div style="border: 1px solid black; border-radius:10px; font-size:1em; font-variant:normal; font-weight:normal; font-family: Times New Roman, Times, serif; padding:5px" ><h3 align="center"><u>Important</u></h3><p>The codes in examples are executed on Linux (Ubuntu 16.04 <b>64 bit</b>) with <b>g++ version 5.4.0</b> (thread model- <b>Posix</b>).</p><p>Here, when we refer to &#39;memory&#39;, it means we are talking about only RAM, as program is executed here only.</p></div>
+
+<p>Before understanding pointers, first understand how memory is handled by C/C++ compiler.</p> 
+<p>Let us see a loosely connected example. Consider these situations.</p>
+<ol type="1">
+<li> There are a<sub>1</sub>, a<sub>2</sub>, a<sub>3</sub>,...........,a<sub>n</sub>, houses in a city.</li>
+<li> The task is to deliver letters from post-office to these houses.</li>
+<li> One option is to allot each house to each b<sub>1</sub>, b<sub>2</sub>, b<sub>3</sub>,...........,b<sub>n</sub>, post-men and give them job to deliver letters.</li>
+<li> Second option is to allot each house, a unique address and then tell a single post-man to deliver a particular letter to the particular house using those unique addresses.</li>
+</ol>
+
+<p>The post-men in first option are our normal variables defined in our code</p>
+<p>The post-man in second option is our pointer variable defined in our code.</p>
+
+<p><b>A pointer is a variable which stores the address of another variable of same-data-type, to access their values.</b></p>
+
+
+</td>
+<td class="adv"></td>
+</tr>
+<!--**********************ROW 3**************************************-->
+</table>
+
+
+
+
+
+<!-- **************************************************INDEX******************************************************************************************************-->
+
+<table width=100% cellspacing="5">
+<!--*********************ROW 1*************************************-->
+<tr>
+<td class="adv"></td>
+
+
+<td class="main">
+<h1 align="center"><u>Index</u></h1>
+<ol type="1">
+<li><a href="#intro">Basics</a></li>
+<li><a href="#variables">Variables</a></li>
+<li><a href="#address_of_operator">Address-of Operator (&#38;)</li>
+<li><a href="#declaring_pointer">Declaring a pointer</a></li>
+<li><a href="#initializing_pointer">Storing address in a Pointer</a></li>
+<li><a href="#dereference">De-reference/ Indirection Operator</a></li>
+<li><a href="#double_pointer">Pointer to a pointer or Pointer to pointer or Double Pointer</a></li>
+<li><a href="#size_of_pointer">Size of Pointer</a></li>
+<li><a href="#pointer_to_array">Pointer pointing to an array</a></li>
+<li><a href="#pointer++">Arithmetic operations on Pointers</a></li>
+<li><a href="#more">Some more Results</a></li>
+<li><a href="#types">Different types of Pointers</a></li>
+  <ol type="a">
+  <li><a href="#int*">int *ptr</li>
+  <li><a href="#const_int*">const int *ptr</a></li>
+  <li><a href="#const_int*">int const *ptr</a></li>
+  <li><a href="#*const">int *const ptr</a></li>
+  <li><a href="#const_int_const*">const int *const ptr</a></li>
+  </ol>
+
+<li><a href="#2d">Implementation of 2-D array</a></li>
+<li><a href="#point_2d">Pointer to a 2-D array</a></li>
+<li><a href="#dynamic">Dynamic Allocation</a></li>
+<li><a href="#malloc">malloc()</a></li>
+<li><a href="#calloc">calloc()</a></li>
+<li><a href="#realloc">realloc()</a></li>
+<li><a href="#free">free()</a></li>
+<li><a href="#use_malloc">Implementing malloc()</a></li>
+<li><a href="#dynamic_1d">Dynamic allocation of 1-D array</a></li>
+<li><a href="#dynamic_1d_calloc">Dynamic allocation of 1-D array using calloc()</a></li>
+<li><a href="#dynamic_1d_realloc">Dynamic re-allocation of 1-D array using realloc()</a></li>
+<li><a href="#dynamic_2d">Dynamic allocation of 2-D array</a></li>
+<li><a href="#NULL">Wild pointer and importance of NULL</a></li>
+
+</ol>
+</td>
+
+<td class="adv"></td>
+</tr>
+</table>
+
+
+
+
+
+
+
+
+
+
+<!-- **************************************************TABLE 2******************************************************************************************************-->
+
+<table width=100% cellspacing="5" id="variables">
+<!--*********************ROW 1*************************************-->
+<tr>
+<td class="adv"></td>
+
+
+<td class="main">
+<h1 align="center"><u>Variables</u></h1>
+<p>Variables are locations in the computer&#39;s memory which can be accessed by their identifier (their name). This way, the program does not need to care about the physical address of the data in memory; it simply uses the identifier whenever it needs to refer to the variable. Or we can say that whenever we run the code, the memory is allotted to variables and their addresses are assigned to the identifiers. 
+When a variable is initialized, the memory needed to store its value is allocated at a specific location in memory.</p> 
+<p>Generally, C/C++ programs do not actively decide the exact memory addresses where its variables are stored. Fortunately, that task is left to the environment where the program is run - generally, an operating system that decides the particular memory locations on runtime. However, it may be useful for a program to be able to obtain the address of a variable during runtime in order to access data cells that are at a certain position relative to it.  </p>
+
+</td>
+
+
+
+<td class="adv"></td>
+</tr>
+</table>
+<!-- **************************************************TABLE 3******************************************************************************************************-->
+
+<table width=100% cellspacing="5" id="address_of_operator">
+<!--*********************ROW 1*************************************-->
+<tr>
+<td class="adv"></td>
+
+
+<td class="main">
+<h1 align="center"><u>Address-of Operator(&#38;)</u></h1>
+<p>Pointers are special kind of variables which store address of another variable of <b>same type</b>.</p> 
+
+<p>The address of any variable can be obtained by putting '&#38;' (address-of operator) before it. </p>
+
+Type the following C code:
+
+<pre>
+<div class="codee">
+ <span class="preprocess">#include</span> <span class="text">&#60;stdio.h&#62;</span>
+
+ <span class="dtype">int</span> <span class="white"> main()</span>
+ <span class="white">{</span>
+  <span class="dtype">int</span> <span class="white">a = </span><span class="text">10</span><span class="white">;</span> <span class="comment">// &#39;a&#39; is declared and initialized </span>
+
+  <span class="white">printf(</span> <span class="text">&#34;</span> <span class="textmodf">%d</span> <span class="text">&#34;</span> <span class="white">, a);</span>
+
+  <span class="white">printf(</span> <span class="text">&#34;</span><span class="textmodf">\n\n %p</span> <span class="text">&#34;</span> <span class="white">, &#38;a);</span> <span class="comment">
+  /* &#39;&#38;a&#39; returns the address of variable &#39;a&#39;, and
+     it is a hexadecimal value. */</span>
+
+  <span class="white">printf(</span> <span class="text">&#34;</span><span class="textmodf">\n\n %u</span> <span class="text">&#34;</span> <span class="white">, &#38;a);</span> <span class="comment">
+  /* &#39;&#38;a&#39; returns the address of variable &#39;a&#39;, but this time, 
+     due to &#39;%u&#39;,the return value is converted into &#39;unsigned int&#39;. */</span>
+
+  <span class="white">return 0;</span>
+  <span class="white">}</span>
+
+</div>
+</pre>
+
+
+<h3><u>Output</u></h3>
+
+<pre>
+<div class="codee"><span class="white">
+ 10 
+
+ 0x7fff35b1ee34 
+
+ 900853300 
+</span>
+</div>
+</pre>
+ 
+<p><b>0x7fff35b1ee34</b> or <b>900853300</b> is the address of variable &#39;a&#39;. <b><i>(Value of address will vary every time you run the code.)</i></b></p> 
+<p>Pointers have huge advantage as they store address of other variables. We will discuss about them later, first we should learn how to use them.</p>
+
+<span class="error"><h2>For our ease, in rest of our examples and codes, we will use <code>%u</code> and implicitly convert address from <code>hexadecimal</code> to <code>unsigned decimal</code> value.</h2></span>
+</td>
+
+
+<td class="adv"></td>
+</tr>
+</table>
+
+
+<!-- **************************************************TABLE 4******************************************************************************************************-->
+
+<table width=100% cellspacing="5" id="declaring_pointer">
+<!--*********************ROW 1*************************************-->
+<tr>
+<td class="adv"></td>
+
+
+<td class="main">
+<h1 align="center"><u>Declaring a Pointer</u></h1>
+<p>General Method: <span class="error"><b><i> &#60;data-type&#62; *&#60;identifier&#62; </i></b></span></p>
+Example: 
+<pre>
+<div class="codee">
+  <span class="dtype">int</span> <span class="white">*ptr1;</span>
+  <span class="dtype">float</span> <span class="white">*ptr2;</span>  
+  <span class="dtype">char</span> <span class="white">*ptr3;</span>  
+
+</div>
+</pre>
+<p>As defined above- Pointers are special kind of variables which store address of another variable of <b>same type</b>.</p> 
+<p>Here <b>&#39;ptr1&#39</b>; is a pointer variable of integer type. Hence it can store addresses of only integer variables. </p>
+<p><b>&#39;ptr2&#39</b>; is a pointer variable of float ype. Hence it can store addresses of only float variables. </p>
+<p><b>&#39;ptr3&#39</b>; is a pointer variable of character type. Hence it can store addresses of only character variables. </p>
+
+</td>
+
+
+
+<td class="adv"></td>
+</tr>
+</table>
+
+<!-- **************************************************TABLE 5******************************************************************************************************-->
+
+<table width=100% cellspacing="5" id="initializing_pointer">
+<!--*********************ROW 1*************************************-->
+<tr>
+<td class="adv"></td>
+
+
+<td class="main">
+<h1 align="center"><u>Storing address in a Pointer</u></h1>
+<p>Run this code. <i>(Note: the value of address will vary on every system and every-time you run code.) </i></p>
+<pre>
+<div class="codee">
+ <span class="preprocess">#include</span> <span class="text">&#60;stdio.h&#62;</span>
+
+ <span class="dtype">int</span> <span class="white"> main()</span>
+ <span class="white">{</span>
+  <span class="dtype">int</span> <span class="white">a = </span><span class="text">10</span><span class="white">;</span> <span class="comment">// &#39;a&#39; is declared and initialized </span>
+  <span class="dtype">int</span> <span class="white">*ptr1 = NULL;</span> <span class="comment">// &#39;*ptr1&#39; is declared and initialized </span>
+  <span class="white">ptr1 = &#38;a;</span> <span class="comment">// address of &#39;a&#39; is stored in &#39;ptr1&#39; </span>
+  <span class="white">printf(</span> <span class="text">&#34;</span><span class="textmodf"> %u</span> <span class="text">&#34;</span> <span class="white">, &#38;a);</span>
+  <span class="white">printf(</span> <span class="text">&#34;</span><span class="textmodf">\n\n %u</span> <span class="text">&#34;</span> <span class="white">, ptr1);</span> 
+
+  <span class="white">return 0;</span>
+  <span class="white">}</span>
+
+</div>
+</pre>
+
+<h3><u>Output</u></h3>
+
+<pre>
+<div class="codee"><span class="white">
+ 3019103324 
+
+ 3019103324
+</span>
+</div>
+</pre>
+
+
+
+</td>
+
+
+
+<td class="adv"></td>
+</tr>
+</table>
+<!-- **************************************************TABLE 6******************************************************************************************************-->
+
+<table width=100% cellspacing="5" id="dereference">
+<!--*********************ROW 1*************************************-->
+<tr>
+<td class="adv"></td>
+
+
+<td class="main">
+<h1 align="center"><u>De-reference/ indirection operator (*)</u></h1>
+<p>De-referencing means accessing value stored at particular address.</p>
+<p>This operator has two usages, to declare a pointer and to access the data pointed by the pointer, i.e. access the value, stored in variable, whose address is with the pointer. </p>
+<p>For example, in previous code, the variable <b>&#39;a&#39;</b> has value 10. The address of <b>&#39;a&#39;</b> is stored in <b>&#39;ptr1&#39;</b>. </p>
+
+<p>
+So <code>printf(&#34;%u&#34;, ptr1)</code>, will print the address of <b>&#39;a&#39;</b>. 
+<br/>
+And, <code>printf(&#34;%d&#34;, *ptr1)</code>, will print the value stored at that address. So, it will print <b>&#39;10&#39;</b>.  
+</p>
+
+<pre>
+<div class="codee">
+ <span class="preprocess">#include</span> <span class="text">&#60;stdio.h&#62;</span>
+
+ <span class="dtype">int</span> <span class="white"> main()</span>
+ <span class="white">{</span>
+  <span class="dtype">int</span> <span class="white">a = </span><span class="text">10</span><span class="white">;</span> <span class="comment">// &#39;a&#39; is declared and initialized </span>
+  <span class="dtype">int</span> <span class="white">*ptr1 = NULL;</span> <span class="comment">// &#39;*ptr1&#39; is declared and initialized</span>
+  <span class="white">ptr1 = &#38;a;</span> <span class="comment">// address of &#39;a&#39; is stored in &#39;ptr1&#39; </span>
+  <span class="white">printf(</span> <span class="text">&#34;</span><span class="textmodf"> %d</span> <span class="text">&#34;</span> <span class="white">, a);</span>
+  <span class="white">printf(</span> <span class="text">&#34;</span><span class="textmodf">\n %u</span> <span class="text">&#34;</span> <span class="white">, ptr1);</span>
+  <span class="white">printf(</span> <span class="text">&#34;</span><span class="textmodf">\n %u</span> <span class="text">&#34;</span> <span class="white">, *ptr1);</span>
+
+  <span class="white">return 0;</span>
+  <span class="white">}</span>
+
+</div>
+</pre>
+
+<h3><u>Output</u></h3>
+
+<pre>
+<div class="codee"><span class="white">
+ 10
+ 3019103549
+ 10
+</span>
+</div>
+</pre>
+</td>
+
+<td class="adv"></td>
+</tr>
+</table>
+
+<!-- **************************************************TABLE 7******************************************************************************************************-->
+
+<table width=100% cellspacing="5" id="double_pointer">
+<!--*********************ROW 1*************************************-->
+<tr>
+<td class="adv"></td>
+
+
+<td class="main">
+<h1 align="center"><u>Pointer pointing to a pointer</br>OR</br> Pointer to pointer</br>OR</br>Double pointer/ Triple pointer</u></h1>
+
+<p>Pointer to a pointer means, &#34;A pointer which stores the address of another pointer&#34;.</p> 
+<p>This may sound confusing, but take it in simple way. The concept of pointers is to store address of variables of same data type.</p>  
+<p>As we defined, &#34;Pointers are special kind of variables which store address of another variable of same type&#34;. But, Pointers are also variables. Though the value, inside them is an address, but this value can be changed. </p>
+<p><b>For example:</b></p>
+<pre>
+<div class="codee">
+ <span class="preprocess">#include</span> <span class="text">&#60;stdio.h&#62;</span>
+
+ <span class="dtype">int</span> <span class="white"> main()</span>
+ <span class="white">{</span>
+  <span class="dtype">int</span> <span class="white">a = </span><span class="text">10</span><span class="white">, b = </span><span class="text">37</span><span class="white">;</span> <span class="comment">// &#39;a&#39; and &#39;b&#39; are declared and initialized </span>
+  <span class="dtype">int</span> <span class="white">*ptr1 = NULL;</span> <span class="comment">// &#39;*ptr1&#39; is declared and initialized</span>
+  <span class="white">ptr1 = &#38;a;</span> <span class="comment">// address of &#39;a&#39; is stored in &#39;ptr1&#39; </span>
+  <span class="white">printf(</span> <span class="text">&#34;</span><span class="textmodf"> %d</span> <span class="text">&#34;</span> <span class="white">, a);</span>
+  <span class="white">printf(</span> <span class="text">&#34;</span><span class="textmodf">\n %u</span> <span class="text">&#34;</span> <span class="white">, ptr1);</span>
+  <span class="white">printf(</span> <span class="text">&#34;</span><span class="textmodf">\n %u</span> <span class="text">&#34;</span> <span class="white">, *ptr1);</span>
+
+  <span class="white">ptr1 = &#38;b;</span> <span class="comment">// address of &#39;b&#39; is stored in &#39;ptr1&#39; </span>
+  <span class="white">printf(</span> <span class="text">&#34;</span><span class="textmodf">\n %d</span> <span class="text">&#34;</span> <span class="white">, b);</span>
+  <span class="white">printf(</span> <span class="text">&#34;</span><span class="textmodf">\n %u</span> <span class="text">&#34;</span> <span class="white">, ptr1);</span>
+  <span class="white">printf(</span> <span class="text">&#34;</span><span class="textmodf">\n %u</span> <span class="text">&#34;</span> <span class="white">, *ptr1);</span>
+
+
+  <span class="white">return 0;</span>
+  <span class="white">}</span>
+
+</div>
+</pre>
+
+<h3><u>Output</u></h3>
+
+<pre>
+<div class="codee"><span class="white">
+ 10
+ 1351588296 
+ 10
+ 37
+ 1351588300
+ 37
+</span>
+</div>
+</pre>
+
+<p>Coming back to the topic.</p> 
+<p>We understood the theoretical concept of pointer-to-pointer, now we will use this concept to implement double, triple pointer and so on. </p>
+<p>Let's have some variables. </p>
+<pre>
+<div class="codee">
+  <span class="dtype">int</span> <span class="white">c = </span><span class="text">45</span><span class="white">;</span>
+  <span class="dtype">int</span> <span class="white">*ptr1 = &#38;c;</span>
+  <span class="dtype">int</span> <span class="white">**ptr2 = &#38;ptr1;</span>
+  <span class="dtype">int</span> <span class="white">***ptr3 = &#38;ptr2;</span>
+
+</div>
+</pre>
+
+<i>
+<b><u>Note:</u></b>  
+<ul>
+<li>Single-pointer-variable can save the address of a variable. </li>
+
+<li>Double-pointer-variable can save the address of a single-pointer-variable. </li>
+
+<li>Triple-pointer-variable can save the address of a double-pointer-variable. And so on..</li> 
+</ul>
+</br>       Not doing so will show error for &#34;type-mismatch&#34;, until the data-type is changed explicitly. 
+<p>This is because, single-pointer: it has to point a data.</p>
+<p>Double-pointer: it has to point a pointer, which in points a data.</p>
+<p>Triple-pointer: it has to point a pointer, which again points another pointer, which points a data</p>
+And this chain extends and goes same for multi-dimensional pointers.
+</i>
+</br></br></br></br> 
+<p>The de-reference/ indirection operator (*): to understand things more clearly, interpret it as:</p> 
+<p><b>&#39;*&#39; - go to the address and access the value.</b> </p> 
+
+<center><div>
+<table  width=100% cellpadding="4" border="2" bordercolor="#000000" cellspacing="0" style="font-family: Arial Black, Gadget, sans-serif; font-style: normal;  font-size: 1em; font-variant: normal; font-weight: normal;">
+<!--************************(c)**************************-->
+<tr>
+<td><b>printf("&nbsp;\n%u&nbsp;",&nbsp;c);</b></td>
+<td><b>Output: </b>45</td>
+</tr>
+<!--******************(ptr1)*******************************-->
+<tr>
+<td><b>printf("&nbsp;\n%u&nbsp;",&nbsp;ptr1);</b></td>
+<td>Prints the value stored in &#39;ptr1&#39;, i.e. address of &#39;c&#39;</td>
+</tr>
+<!--***************(*ptr1)***************************-->
+<tr>
+<td><b>printf("&nbsp;\n%u&nbsp;",&nbsp;*ptr1);</b></td>
+<td>
+<ol type="1">
+<li><b>*ptr1 -&#62; goes to the address.</b></br>Thus, goes to location of &#39;c&#39;</li>
+</br><li><b>Now access the value stored in it.</b></br>Thus, prints 45.</li>
+ </ol>
+ </td>
+ </tr>
+
+<!--**************(ptr2)*****************************-->
+<tr>
+<td><b>printf("&nbsp;\n%u&nbsp;",&nbsp;ptr2);</b></td>
+<td>Prints the value stored in &#39;ptr2&#39;, i.e. address of &#39;ptr1&#39;</td>
+</tr>
+<!--*************(*ptr2)************************-->
+<tr>
+<td><b>printf("&nbsp;\n%u&nbsp;",&nbsp;*ptr2);</b></td>
+<td>
+<ol type="1">
+<li><b>*ptr2 -&#62; goes to the address.</b></br>Thus, goes to location of &#39;ptr1&#39;</li>
+</br><li><b>Now access the value stored in it.</b></br>Thus, prints the address of &#39;c&#39;.</li>
+
+ </ol>
+ </td>
+ </tr>
+<!--****************(**ptr2)********************-->
+
+<tr>
+<td><b>printf("&nbsp;\n%u&nbsp;",&nbsp;**ptr2);</b></td>
+<td>
+<p>When two operators of same precedence are used, they are evaluated according to their associativity.</p>
+<p>Since the dereference/indirection operator has associativity from right to left, <b>**ptr2</b> is evaluated as <b>*(*ptr2)</b>. </p>
+So, 
+<ol type="1">
+<li><b>*ptr2 -&#62; goes to the address.</b></br>Thus, goes to location of &#39;ptr1&#39;</li>
+</br><li><b>Now access the value stored in it.</b>
+        </br>Thus, got the address of &#39;c&#39;.
+        </br>Thus, <b>*ptr2</b> = <b>ptr1</b>.
+        </br>Thus, <b>**ptr2</b> = <b>*(*ptr2)</b> = <b>*(ptr1)</b></li>
+</br><li><b>*ptr1 -&#62; goes to the address.</b></br>Thus, goes to location of &#39;c&#39;</li>
+</br><li><b>Now access the value stored in it.</b></br>Thus, prints 45.</li>
+ </ol>
+ </td>
+ </tr>
+<!--*****************(ptr3)******************-->
+<tr>
+<td><b>printf("&nbsp;\n%u&nbsp;",&nbsp;ptr3);</b></td>
+<td>Prints the value stored in &#39;ptr2&#39;, i.e. address of &#39;ptr2&#39;</td>
+</tr>
+<!--************(*ptr3)*******************-->
+<tr>
+<td><b>printf("&nbsp;\n%u&nbsp;",&nbsp;*ptr3);</b></td>
+<td>
+<ol type="1">
+<li><b>*ptr3 -&#62; goes to the address.</b></br>Thus, goes to location of &#39;ptr2&#39;</li>
+</br><li><b>Now access the value stored in it.</b></br>Thus, prints the address of &#39;ptr1&#39;.</li>
+
+ </ol>
+ </td>
+ </tr>
+<!--**********(**ptr3)*******************-->
+<tr>
+<td><b>printf("&nbsp;\n%u&nbsp;",&nbsp;**ptr3);</b></td>
+<td>
+<b>**ptr3</b> is evaluated as <b>*(*ptr3)</b>.
+So,
+<ol type="1">
+<li><b>*ptr3 -&#62; goes to the address.</b></br>Thus, goes to location of &#39;ptr2&#39;</li>
+</br><li><b>Now access the value stored in it.</b>
+        </br>Thus, got the address of &#39;ptr1&#39;.
+        </br>Thus, <b>*ptr3</b> = <b>ptr2</b>.
+        </br>Thus, <b>**ptr3</b> = <b>*(*ptr3)</b> = <b>*(ptr2)</b></li>
+</br><li><b>*ptr2 -&#62; goes to the address.</b></br>Thus, goes to location of &#39;ptr1&#39;</li>
+</br><li><b>Now access the value stored in it.</b></br>Thus, prints the address &#39;c&#39;.</li>
+ </ol>
+ </td>
+ </tr>
+
+<!--**************(***ptr3)*************-->
+<tr>
+<td><b>printf("&nbsp;\n%u&nbsp;",&nbsp;***ptr3);</b></td>
+<td>
+<b>***ptr3</b> is evaluated as <b>*(*(*ptr3))</b>.
+So,
+<ol type="1">
+<li><b>*ptr3 -&#62; goes to the address.</b></br>Thus, goes to location of &#39;ptr2&#39;</li>
+</br><li><b>Now access the value stored in it.</b>
+        </br>Thus, got the address of &#39;ptr1&#39;.
+        </br>Thus, <b>*ptr3</b> = <b>ptr2</b>.
+        </br>Thus, <b>**ptr3</b> = <b>*(*ptr3)</b> = <b>*(ptr2)</b></li>
+</br><li><b>*ptr2 -&#62; goes to the address.</b></br>Thus, goes to location of &#39;ptr1&#39;</li>
+</br><li><b>Now access the value stored in it.</b>
+        </br>Thus, got the address &#39;c&#39;.
+        </br>Thus, <b>*ptr2</b> = <b>ptr1</b>.
+        </br>Thus, <b>***ptr3</b> = <b>*(*(*ptr3))</b> = <b>*(*(ptr2))</b> = <b>*ptr1</b> </li>
+
+</br><li><b>*ptr1 -&#62; goes to the address.</b></br>Thus, goes to location of &#39;c&#39;</li>
+</br><li><b>Now access the value stored in it.</b></br>Thus, prints 45.</li>
+
+ </ol>
+ </td>
+ </tr>
+</table>
+</div></center>
+
+</td>
+
+
+<td class="adv"></td>
+</tr>
+</table>
+<!-- **************************************************TABLE 8******************************************************************************************************-->
+
+<table width=100% cellspacing="5" id="size_of_pointer">
+<!--*********************ROW 1*************************************-->
+<tr>
+<td class="adv"></td>
+
+
+<td class="main">
+<h1 align="center"><u>Size of Pointer</u></h1>
+<p>Since whole and soul purpose of pointers is to store address, they must contain an integral value. Hence their size is equal to that of <b>&#39;int&#39;</b> or <b>&#39;long&#39;</b>, this depends on system and compiler. On my system <a href="#intro"><i>(specs given in introduction)</i></a>, it is equal to <b>&#39;long&#39;</b>.</p>
+<pre>
+<div class="codee">
+  <span class="dtype">int</span> <span class="white">*ptr1;</span>
+  <span class="dtype">float</span> <span class="white">*ptr2;</span>
+  <span class="dtype">char</span> <span class="white">*ptr3;</span>
+
+</div>
+</pre>
+<p><b>char*, float*, int*,</b> all are of same size and contain integral value. Though they are defined specifically as <b>&#39;char&#39;</b>, <b>&#39;float&#39;</b>, <b>&#39;int&#39;</b> etc. This is done so that compiler should know that what kind of data it is going to point to. So, it becomes easy for it to de-reference it. This is all done to handle data properly.
+Let&#39;s look at the code:
+
+<pre>
+<div class="codee">
+ <span class="preprocess">#include</span> <span class="text">&#60;stdio.h&#62;</span>
+
+ <span class="dtype">int</span> <span class="white"> main()</span>
+ <span class="white">{</span>
+  <span class="white">printf(</span> <span class="text">&#34;</span><span class="textmodf"> %u</span> <span class="text">&#34;</span> <span class="white">, sizeof(</span><span class="dtype"> int* </span><span class="white">));</span>
+  <span class="white">printf(</span> <span class="text">&#34;</span><span class="textmodf">\n %u</span> <span class="text">&#34;</span> <span class="white">, sizeof(</span><span class="dtype"> char* </span><span class="white">));</span>
+  <span class="white">printf(</span> <span class="text">&#34;</span><span class="textmodf">\n %u</span> <span class="text">&#34;</span> <span class="white">, sizeof(</span><span class="dtype"> float* </span><span class="white">));</span>
+
+
+  <span class="white">return 0;</span>
+  <span class="white">}</span>
+
+</div>
+</pre>
+
+<h3><u>Output</u></h3>
+
+<pre>
+<div class="codee"><span class="white">
+ 8
+ 8
+ 8
+</span>
+</div>
+</pre>
+
+
+
+</td>
+
+
+
+<td class="adv"></td>
+</tr>
+</table>
+<!-- **************************************************TABLE 9******************************************************************************************************-->
+
+<table width=100% cellspacing="5" id="pointer_to_array">
+<!--*********************ROW 1*************************************-->
+<tr>
+<td class="adv"></td>
+
+
+<td class="main">
+<h1 align="center"><u>Pointer pointing to an array</u></h1>
+<p>In normal conditions too, arrays are implemented using concept, similar to pointers.</p>  
+
+<pre><div class="codee"><span class="dtype">
+ int</span> <span class="white">arr[</span><span class="text"> 5 </span><span class="white">];
+
+</span></div> </pre> 
+
+<p>Here the 5-consecutive memory-blocks for &#39;int&#39; type are allotted and address of 1<sup>st</sup> element is stored in variable &#39;arr&#39;. Accessing first element will give access to other elements as well because their memory addresses are in consecutive order.</p>
+<p>Let us learn through various codes:</p>
+<pre>
+<div class="codee">
+ <span class="preprocess">#include</span> <span class="text">&#60;stdio.h&#62;</span>
+
+ <span class="dtype">int</span> <span class="white"> main()</span>
+ <span class="white">{</span>
+  <span class="dtype">int</span> <span class="white">arr[</span><span class="text"> 5 </span><span class="white">];</span>
+  <span class="white">printf(</span> <span class="text">&#34;</span><span class="textmodf"> %u</span> <span class="text">&#34;</span><span class="white">, arr);</span>
+  <span class="white">printf(</span> <span class="text">&#34;</span><span class="textmodf">\n %u</span> <span class="text">&#34;</span><span class="white">, &#38;arr[</span><span class="text"> 0 </span><span class="white">]);</span>
+
+  <span class="white">return 0;</span>
+  <span class="white">}</span>
+
+</div>
+</pre>
+
+<h3><u>Output</u></h3>
+
+<pre>
+<div class="codee"><span class="white">
+ 4146104064 
+
+ 4146104064 
+</span>
+</div>
+</pre>
+
+<p>Both are identical. Hence it is clear that identifier of array stores the address of 1<sup>st</sup> element of the array.  </p>
+<p>Thus, if we store the address, stored in &#39;arr&#39;, into a pointer, it should also work well. Let&#39;s try: </p>
+
+<pre>
+<div class="codee">
+ <span class="preprocess">#include</span> <span class="text">&#60;stdio.h&#62;</span>
+
+ <span class="dtype">int</span> <span class="white"> main()</span>
+ <span class="white">{</span>
+  <span class="dtype">int</span> <span class="white">arr[</span><span class="text"> 5 </span><span class="white">] = {</span><span class="text">3</span><span class="white">,</span></span><span class="text">43</span><span class="white">,</span></span><span class="text">23</span><span class="white">,</span></span><span class="text">4</span><span class="white">,</span></span><span class="text">2</span><span class="white">};</span>
+  <span class="dtype">int</span> <span class="white">*b = NULL;</span>
+  <span class="white">b = arr;</span>
+
+  <span class="white">printf(</span> <span class="text">&#34;</span><span class="textmodf"> %u</span> <span class="text">&#34;</span><span class="white">, *b);</span>
+  <span class="white">printf(</span> <span class="text">&#34;</span><span class="textmodf">\n\n %u</span> <span class="text">&#34;</span><span class="white">, arr[</span><span class="text"> 0 </span><span class="white">]);</span>
+
+  <span class="white">return 0;</span>
+  <span class="white">}</span>
+
+</div>
+</pre>
+
+<h3><u>Output</u></h3>
+
+<pre>
+<div class="codee"><span class="white">
+ 3
+
+ 3
+</span>
+</div>
+</pre>
+<p><b><u>Note:</u></b> We didn&#39;t used &#39;&#38;&#39; while initializing pointer &#39;b&#39;. It is because &#39;arr&#39; itself is storing address of 1<sup>st</sup> element of the array.</p>
+<p>Hence, <b>&#39;arr&#39;</b> is <b>equivalent</b> to <b>&#39;b&#39;</b> but <b>NOT</b> equal to <b>&#39;b&#39;</b>. </p>
+</br></br><div><span class="error"><h2><u>This code does&#39;t works:</u></h2></span></div>
+
+<pre>
+<div class="codee">
+ <span class="preprocess">#include</span> <span class="text">&#60;stdio.h&#62;</span>
+
+ <span class="dtype">int</span> <span class="white"> main()</span>
+ <span class="white">{</span>
+  <span class="dtype">int</span> <span class="white">arr[</span><span class="text"> 5 </span><span class="white">] = {</span><span class="text">3</span><span class="white">,</span></span><span class="text">43</span><span class="white">,</span></span><span class="text">23</span><span class="white">,</span></span><span class="text">4</span><span class="white">,</span></span><span class="text">2</span><span class="white">}, c = </span><span class="text">10</span><span class="white">;</span>
+  <span class="white">arr = &#38;c;</span>
+
+  <span class="white">printf(</span> <span class="text">&#34;</span> <span class="textmodf">\n%u</span> <span class="text">&#34;</span><span class="white">, arr);</span>
+
+  <span class="white">return 0;</span>
+  <span class="white">}</span>
+
+</div>
+</pre>
+
+<h3><u>Compilation Error:</u></h3>
+
+<pre>
+<div class="codee"><span class="error">
+ trial.c: In function &#39;main&#39;:
+ trial.c:6:7: error: assignment to expression with array type
+    arr = &c;
+        ^
+ trial.c:8:11: warning: format &#39;%u&#39; expects argument of type 
+ &#39;unsigned int&#39;, but argument 2 has type &#39;int *&#39; [-Wformat=]
+    printf( &#34; \n%u &#34;, arr);
+            ^
+</span>
+</div>
+</pre>
+
+<p>As said, <b>&#39;arr&#39;</b> is <b>equivalent</b> to pointer <b>&#39;b&#39;</b> <i>(here, &#39;b&#39 is referred to the pointer vaiable declared in previous working example.)</i>, but <b>NOT</b> equal to pointer <b>&#39;b&#39;</b>. As once allotted, the address stored in <b>&#39;arr&#39;</b> cannot be changed. </p>
+</td>
+
+
+
+
+<td class="adv"></td>
+</tr>
+</table>
+<!-- **************************************************TABLE 10******************************************************************************************************-->
+
+<table width=100% cellspacing="5" id="pointer++">
+<!--*********************ROW 1*************************************-->
+<tr>
+<td class="adv"></td>
+
+
+<td class="main">
+<h1 align="center"><u>Arithmetic operations on Pointers</u></h1>
+Consider this code:
+<pre>
+<div class="codee">
+ <span class="preprocess">#include</span> <span class="text">&#60;stdio.h&#62;</span>
+
+ <span class="dtype">int</span> <span class="white"> main()</span>
+ <span class="white">{</span>
+  <span class="dtype">int</span> <span class="white">i, arr[</span><span class="text"> 5 </span><span class="white">] = {</span><span class="text">3</span><span class="white">,</span></span><span class="text">43</span><span class="white">,</span></span><span class="text">23</span><span class="white">,</span></span><span class="text">4</span><span class="white">,</span></span><span class="text">2</span><span class="white">};</span>
+  <span class="dtype">int</span> <span class="white">*b = NULL;</span>
+  <span class="white">b = arr;</span>
+
+  <span class="loop">for</span><span class="white">(i = </span> <span class="text">0</span> <span class="white">; i &#60; </span> <span class="text">5</span><span class="white">; i++)</span>
+   <span class="white">printf(</span> <span class="text">&#34;</span><span class="textmodf">\n %u</span> <span class="text">&#34;</span><span class="white">, *(b+i));</span>
+
+  <span class="white">return 0;</span>
+  <span class="white">}</span>
+
+</div>
+</pre>
+
+<h3><u>Output</u></h3>
+
+<pre>
+<div class="codee"><span class="white">
+ 3
+ 43
+ 23
+ 4
+ 2
+</span>
+</div>
+</pre>
+
+<p><h3>Confused?</h3></p>
+<p>Now it is obvious to think that there is something wrong. If the hypothetical address of first element of &#39;arr&#39; is 8542, you will think: </p>
+<b>
+<p>b = 8542&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*b = 3</p>
+<p>b + i = 8543&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*b = &#60;some-garbage-value&#62;</p>
+</b>
+<p>Right??</p>
+<p>Wrong. Now this is where declaring the data-type of pointer comes into play.</p>
+<p>Basically:</p>
+<p><b>b + 1  &#8800; 8543</b></p>
+<p>The compiler knows <b>&#39;b&#39;</b> is a pointer <b>and</b> it also knows that <b>&#39;b&#39;</b> is an integer pointer. Hence it knows that integers are consist of 4 consecutive bytes (size of <code>int </code> may change from compiler to compiler and machine to machine). Thus: </p>
+<p><b>(b + 1) = 8542 + sizeof(int)</b></p>
+<p>In General: <span class="error"><b><i> &#60;pointer + 1&#62; = &#60;address-value-inside-pointer + sizeof(data-type-of-pointer)&#62; </i></b></span></p>
+<p>In Linux, 64 bit, gcc/g++ compiler, size of <code>int</code> is 4 bytes.</p>
+<div>
+<table width=100% border="2" bordercolor="black" cellpadding="4" cellspacing="0"style="font-family: Arial Black, Gadget, sans-serif; font-style: normal;  font-size: 1em; font-variant: normal; font-weight: bold;">
+<b>
+<tr>
+<td> i = 0</td>
+<td> (b + i)</td>
+<td> (b + 0)</td>
+<td> address of arr[0]</td>
+<td> *(b + 0)</td>
+<td> 3</td>
+</tr>
+
+<tr>
+<td> i = 1</td>
+<td> (b + i)</td>
+<td> (b + 1)</td>
+<td> address of arr[1]</td>
+<td> *(b + 1)</td>
+<td> 43</td>
+</tr>
+
+<tr>
+<td> i = 2</td>
+<td> (b + i)</td>
+<td> (b + 2)</td>
+<td> address of arr[2]</td>
+<td> *(b + 2)</td>
+<td> 23</td>
+</tr>
+
+<tr>
+<td> i = 3</td>
+<td> (b + i)</td>
+<td> (b + 3)</td>
+<td> address of arr[3]</td>
+<td> *(b + 3)</td>
+<td> 4</td>
+</tr>
+
+<tr>
+<td> i = 4</td>
+<td> (b + i)</td>
+<td> (b + 4)</td>
+<td> address of arr[4]</td>
+<td> *(b + 4)</td>
+<td> 2</td>
+</tr>
+</b>
+</table>
+</div>
+
+</td>
+
+<td class="adv"></td>
+</tr>
+</table>
+
+<!-- **************************************************TABLE 11******************************************************************************************************-->
+
+<table width=100% cellspacing="5" id="more">
+<!--*********************ROW 1*************************************-->
+<tr>
+<td class="adv"></td>
+
+
+<td class="main">
+<h1 align="center"><u>Some more Results</u></h1>
+<p><h2>This code works:</h2></p>
+<pre>
+<div class="codee">
+ <span class="preprocess">#include</span> <span class="text">&#60;stdio.h&#62;</span>
+
+ <span class="dtype">int</span> <span class="white"> main()</span>
+ <span class="white">{</span>
+  <span class="dtype">int</span> <span class="white">i, arr[</span><span class="text"> 5 </span><span class="white">] = {</span><span class="text">3</span><span class="white">,</span></span><span class="text">43</span><span class="white">,</span></span><span class="text">23</span><span class="white">,</span></span><span class="text">4</span><span class="white">,</span></span><span class="text">2</span><span class="white">};</span>
+  <span class="dtype">int</span> <span class="white">*b = NULL;</span>
+  <span class="white">b = arr;</span>
+
+  <span class="loop">for</span><span class="white">(i = </span> <span class="text">0</span> <span class="white">; i &#60; </span> <span class="text">5</span><span class="white">; i++)</span>
+   <span class="white">printf(</span> <span class="text">&#34;</span><span class="textmodf">\n %u</span> <span class="text">&#34;</span><span class="white">, b[i]);</span>
+
+  <span class="white">return 0;</span>
+  <span class="white">}</span>
+
+</div>
+</pre>
+
+<h3><u>Output</u></h3>
+
+<pre>
+<div class="codee"><span class="white">
+ 3
+ 43
+ 23
+ 4
+ 2
+</span>
+</div>
+</pre>
+<p>Though <b>&#39;b&#39;</b> is a pointer, but above results conclude: </p>
+
+<div>
+<table width=100% border="2" bordercolor="black" cellpadding="4" cellspacing="0"style="font-family: Arial Black, Gadget, sans-serif; font-style: normal;  font-size: 1em; font-variant: normal; font-weight: bold;">
+<b>
+<tr>
+<td> b[0]</td>
+<td> is treated same as</td>
+<td> *(b + 0)</td>
+</tr>
+
+<tr>
+<td> b[1]</td>
+<td> is treated same as</td>
+<td> *(b + 1)</td>
+</tr>
+
+<tr>
+<td> b[2]</td>
+<td> is treated same as</td>
+<td> *(b + 2)</td>
+</tr>
+
+<tr>
+<td> b[3]</td>
+<td> is treated same as</td>
+<td> *(b + 3)</td>
+</tr>
+
+<tr>
+<td> b[4]</td>
+<td> is treated same as</td>
+<td> *(b + 4)</td>
+</tr>
+</b>
+</table>
+<div>
+<p>What will happen if we prefix <b>&#38;i</b> with dereference operator?</p>
+<p><b>&#38;</b> or address-of operator returns the address of the variable to which it is added as prefix. And the work of dereferenc/ indirection operator is to <b>go to the address and access the value.</b></p>
+<p>So, if we prefix <b>&#38;i</b> with dereference/ indirection operator, then <b>*</b> will nullify the effect of address-of (<b>&#38;</b>) operator.</p>
+<div>
+<table width=100% border="2" bordercolor="black" cellpadding="4" cellspacing="0"style="font-family: Arial Black, Gadget, sans-serif; font-style: normal;  font-size: 1em; font-variant: normal; font-weight: bold;">
+<b>
+<tr>
+<td colspan="2"><font color="red"> *</font>(<font color="red">&#38;</font>i)</td>
+<td colspan="2"> is same as</td>
+<td colspan="3"> i </td>
+</tr>
+
+<tr>
+<td colspan="7"><font color="white">t</font></td>
+</tr>
+
+<tr>
+<td> <font color="red">*</font>(<font color="red">&#38;</font>b[i])</td>
+<td> is same as</td>
+<td> <font color="red">*</font>(<font color="red">&#38;</font>*(b + i))</td>
+<td> is same as</td>
+<td> *(b + i) </td>
+<td> is same as</td>
+<td> b[i]</td>
+</tr>
+
+</b>
+</table>
+<div>
+
+
+</br>
+</br>
+</br>
+</br>
+<p>Since <b>b</b> is a pointer and *(b + i) works same as b[i].</p>
+<p>Thus, *(a + i) should also work. as &#39;arr&#39; is equivalent to a pointer.</p>
+<h2>This code works:</h2>
+<pre>
+<div class="codee">
+ <span class="preprocess">#include</span> <span class="text">&#60;stdio.h&#62;</span>
+
+ <span class="dtype">int</span> <span class="white"> main()</span>
+ <span class="white">{</span>
+  <span class="dtype">int</span> <span class="white">i, arr[</span><span class="text"> 5 </span><span class="white">] = {</span><span class="text">3</span><span class="white">,</span></span><span class="text">43</span><span class="white">,</span></span><span class="text">23</span><span class="white">,</span></span><span class="text">4</span><span class="white">,</span></span><span class="text">2</span><span class="white">};</span>
+  <span class="dtype">int</span> <span class="white">*b = NULL;</span>
+  <span class="white">b = arr;</span>
+
+  <span class="loop">for</span><span class="white">(i = </span> <span class="text">0</span> <span class="white">; i &#60; </span> <span class="text">5</span><span class="white">; i++)</span>
+   <span class="white">printf(</span> <span class="text">&#34;</span><span class="textmodf">\n %u</span> <span class="text">&#34;</span><span class="white">, *(arr + i));</span>
+
+  <span class="white">return 0;</span>
+  <span class="white">}</span>
+
+</div>
+</pre>
+
+<h3><u>Output</u></h3>
+
+<pre>
+<div class="codee"><span class="white">
+ 3
+ 43
+ 23
+ 4
+ 2
+</span>
+</div>
+</pre>
+<p>This again confirms the similarity between pointer and array. As, though it is a normal array, the de-reference/indirection operator works perfectly on &#39;arr&#39;.</p> 
+<p>This is because &#39;arr&#39; stores the address, and the work of dereference/ indirection operator is to <b>go to the address stored in it and access the value</b>. </p>
+
+
+</br>
+</br>
+</br>
+</br>
+<p><h2>This code works:</h2></p>
+<pre>
+<div class="codee">
+ <span class="preprocess">#include</span> <span class="text">&#60;stdio.h&#62;</span>
+
+ <span class="dtype">int</span> <span class="white"> main()</span>
+ <span class="white">{</span>
+  <span class="dtype">int</span> <span class="white">arr[</span><span class="text"> 5 </span><span class="white">] = {</span><span class="text">3</span><span class="white">,</span></span><span class="text">43</span><span class="white">,</span></span><span class="text">23</span><span class="white">,</span></span><span class="text">4</span><span class="white">,</span></span><span class="text">2</span><span class="white">};</span>
+  <span class="dtype">int</span> <span class="white">*b = NULL, i;</span>
+  <span class="white">b = arr;</span>
+<span class="comment">/* or you can also write ptr=&#38;a[0]; as both &#39;a&#39; and</br> &#39;ptr&#39; are pointers */ </span>
+
+  <span class="loop">for</span><span class="white">(i = </span> <span class="text">0</span> <span class="white">; i &#60; </span> <span class="text">5</span><span class="white">; i++)</span>
+   <span class="white">printf(</span> <span class="text">&#34;</span><span class="textmodf"> %u</span> <span class="text">&#34;</span><span class="white">, *(b + i));</span>
+
+  <span class="white">printf(</span> <span class="text">&#34;\n&#34;<span class="white">);</span>
+
+  <span class="loop">for</span><span class="white">(i = </span> <span class="text">0</span> <span class="white">; i &#60; </span> <span class="text">5</span><span class="white">; i++)</span>
+    <span class="white">{
+     printf(</span> <span class="text">&#34;</span><span class="textmodf"> %u</span> <span class="text">&#34;</span><span class="white">, *b);
+     b++;</span><span class="comment">// or b+ = 1</span>
+     <span class="white">}</span>
+
+   <span class="white">printf(</span> <span class="text">&#34;\n&#34;<span class="white">);</span>
+
+    <span class="loop">for</span><span class="white">(i = </span> <span class="text">0</span> <span class="white">; i &#60; </span> <span class="text">5</span><span class="white">; i++)</span>
+   <span class="white">printf(</span> <span class="text">&#34;</span><span class="textmodf"> %u</span> <span class="text">&#34;</span><span class="white">, arr[i]);
+
+  <span class="white">return 0;</span>
+  <span class="white">}</span>
+
+</div>
+</pre>
+
+<h3><u>Output</u></h3>
+
+<pre>
+<div class="codee"><span class="white">
+ 3 43 23 4 2
+ 3 43 23 4 2
+ 3 43 23 4 2
+</span>
+</div>
+</pre>
+
+<p>
+<b><u>VER VERY IMPORTANT NOTE:</u></b></br>&#39;b&#39; is pointing to element of the array &#39;arr&#39;. Not the whole array. Not to be confused.</p> 
+<p>So when you print *(b + i) or something equivalent. Do check that the address doesn&#39;t go out of range of array. </p>
+<p>It will not show error, but it will display some garbage value present at that unused memory.</p>
+<p>For example, for the above code if we try to print, arr[6] or *(b + 6), it will not show error, but it will show the value present at that address.</p>
+
+
+
+</td>
+<td class="adv"></td>
+</tr>
+</table>
+
+<!-- **************************************************TABLE 12******************************************************************************************************-->
+
+<table width=100% cellspacing="5" id="types">
+<!--*********************ROW 1*************************************-->
+<tr>
+<td class="adv"></td>
+
+
+<td class="main">
+<h1 align="center"><u>Different types of Pointers</u></h1>
+</br>
+</br>
+<h1 align="center" id="int*"><u>int *ptr;</u></h1>
+<!--******************int *ptr*********************-->
+<pre>
+<div class="codee">
+ <span class="preprocess">#include</span> <span class="text">&#60;stdio.h&#62;</span>
+
+ <span class="dtype">int</span> <span class="white"> main()</span>
+ <span class="white">{</span>
+  <span class="dtype">int</span> <span class="white">i, arr[</span><span class="text"> 5 </span><span class="white">] = {</span><span class="text">3</span><span class="white">,</span></span><span class="text">43</span><span class="white">,</span></span><span class="text">23</span><span class="white">,</span></span><span class="text">4</span><span class="white">,</span></span><span class="text">2</span><span class="white">};</span>
+  <span class="dtype">int</span> <span class="white">*ptr = NULL;</span>
+  <span class="white">ptr = arr;</span>
+
+  <span class="loop">for</span><span class="white">(i = </span> <span class="text">0</span> <span class="white">; i &#60; </span> <span class="text">5</span><span class="white">; i++)</span>
+   <span class="white">*(ptr + i) = i;</span>
+ 
+  <span class="loop">for</span><span class="white">(i = </span> <span class="text">0</span> <span class="white">; i &#60; </span> <span class="text">5</span><span class="white">; i++)</span>
+   <span class="white">printf(</span> <span class="text">&#34;</span><span class="textmodf">\n %u</span> <span class="text">&#34;</span><span class="white">, *(ptr + i));</span>
+
+  <span class="white">return 0;</span>
+  <span class="white">}</span>
+
+</div>
+</pre>
+
+<h3><u>Output</u></h3>
+
+<pre>
+<div class="codee"><span class="white">
+ 0
+ 1
+ 2
+ 3
+ 4
+</span>
+</div>
+</pre>
+<h3>Conclusion: </h3>
+<ol type="1">
+<li>The data pointed by ptr can be modified using pointer. (i.e. <b>*ptr = 1;&nbsp;&nbsp;&nbsp;&nbsp;*ptr=2;</b>&nbsp;&nbsp;&nbsp;&nbsp;is valid).</li>
+<li>The data of array can be modified (i.e <b>a[0]=1;&nbsp;&nbsp;&nbsp;&nbsp; a[0] = 2;</b>&nbsp;&nbsp;&nbsp;&nbsp;is valid).</li>
+<li>Adressed stored in ptr can be modified i.e <b>ptr=&#38;b;&nbsp;&nbsp;&nbsp;&nbsp;ptr = &#38;c;</b> (assuming <code>int b,c;</code>), is valid.</li>
+</ol>
+</br>
+</br>
+</br>
+</br>
+
+<h1 align="center" id="const_int*"><u>const int *ptr;</u>&nbsp;&nbsp;&nbsp;&nbsp;or&nbsp;&nbsp;&nbsp;&nbsp;<u>int const *ptr;</u></h1>
+<!--******************const int *ptr*********************-->
+<pre>
+<div class="codee">
+ <span class="preprocess">#include</span> <span class="text">&#60;stdio.h&#62;</span>
+
+ <span class="dtype">int</span> <span class="white"> main()</span>
+ <span class="white">{</span>
+  <span class="dtype">int</span> <span class="white">i, arr[</span><span class="text"> 5 </span><span class="white">] = {</span><span class="text">3</span><span class="white">,</span></span><span class="text">43</span><span class="white">,</span></span><span class="text">23</span><span class="white">,</span></span><span class="text">4</span><span class="white">,</span></span><span class="text">2</span><span class="white">};</span>
+  <span class="dtype">const int</span> <span class="white">*ptr = NULL;</span>
+  <span class="white">ptr = arr;</span>
+
+  <span class="loop">for</span><span class="white">(i = </span> <span class="text">0</span> <span class="white">; i &#60; </span> <span class="text">5</span><span class="white">; i++)</span>
+   <span class="white">*(ptr + i) = i;</span>
+ 
+  <span class="loop">for</span><span class="white">(i = </span> <span class="text">0</span> <span class="white">; i &#60; </span> <span class="text">5</span><span class="white">; i++)</span>
+   <span class="white">printf(</span> <span class="text">&#34;</span> <span class="textmodf">\n%u</span> <span class="text">&#34;</span><span class="white">, *(ptr + i));</span>
+
+  <span class="white">return 0;</span>
+  <span class="white">}</span>
+
+</div>
+</pre>
+
+<h3><u>Compilation error</u></h3>
+<pre>
+<div class="codee"><span class="error">
+ t3.cpp: In function &#39;int main()&#39;:
+ t3.cpp:10:10: error: assignment of read-only location &#39;*(ptr 
+ + ((sizetype)(((long unsigned int)i) * 4ul)))&#39; *(ptr+i)=i;
+                                                        ^
+</span>
+</div>
+</pre>
+<h3>Conclusion: </h3>
+<ol type="1">
+<li>The data pointed by <b>ptr</b> cannot be modified using pointer. (i.e. <b>*ptr = 1;&nbsp;&nbsp;&nbsp;&nbsp;*ptr = 2;</b>&nbsp;&nbsp;&nbsp;&nbsp;is invalid) </li>
+<li>Adressed stored in <b>ptr</b> can be modified i.e <b>ptr = &#38;b;&nbsp;&nbsp;&nbsp;&nbsp;ptr = &#38;c;</b>&nbsp;&nbsp;&nbsp;&nbsp;(assuming <code>int b,c;</code>), is valid.</li>
+<li>The data of array can be modified (i.e <b>arr[0]=1;&nbsp;&nbsp;&nbsp;&nbsp;arr[0]=2;</b>&nbsp;&nbsp;&nbsp;&nbsp;is valid), but it cannot be modified using pointer when using <b>const int* b;</b></li>
+<li><b>*ptr = 1;&nbsp;&nbsp;&nbsp;&nbsp;*ptr = 2;&nbsp;&nbsp;&nbsp;&nbsp;*(ptr + 1) = 1;&nbsp;&nbsp;&nbsp;&nbsp;*(ptr + 1) = 2&nbsp;&nbsp;&nbsp;&nbsp;</b>are all invalid.</li>
+</ol>
+
+</br>
+</br>
+</br>
+</br>
+<h1 align="center" id="*const"><u>int *const ptr;</u></h1>
+<!--******************int *const ptr*********************-->
+<pre>
+<div class="codee">
+ <span class="preprocess">#include</span> <span class="text">&#60;stdio.h&#62;</span>
+
+ <span class="dtype">int</span> <span class="white"> main()</span>
+ <span class="white">{</span>
+  <span class="dtype">int</span> <span class="white">i, arr[</span><span class="text"> 5 </span><span class="white">] = {</span><span class="text">3</span><span class="white">,</span></span><span class="text">43</span><span class="white">,</span></span><span class="text">23</span><span class="white">,</span></span><span class="text">4</span><span class="white">,</span></span><span class="text">2</span><span class="white">};</span>
+  <span class="dtype">int *const </span> <span class="white">ptr = arr;</span>
+
+  <span class="loop">for</span><span class="white">(i = </span> <span class="text">0</span> <span class="white">; i &#60; </span> <span class="text">5</span><span class="white">; i++)</span>
+   <span class="white">*(ptr + i) = i;</span>
+
+  <span class="loop">for</span><span class="white">(i = </span> <span class="text">0</span> <span class="white">; i &#60; </span> <span class="text">5</span><span class="white">; i++)</span>
+   <span class="white">printf(</span> <span class="text">&#34;</span><span class="textmodf">\n %u</span> <span class="text">&#34;</span><span class="white">, *(ptr + i));</span>
+
+  <span class="white">return 0;</span>
+  <span class="white">}</span>
+
+</div>
+</pre>
+
+<h3><u>Output</u></h3>
+<pre>
+<div class="codee"><span class="white">
+ 0
+ 1
+ 2
+ 3
+ 4 
+</span>
+</div>
+</pre>
+
+<h2>BUT!!</h2>
+<pre>
+<div class="codee">
+ <span class="preprocess">#include</span> <span class="text">&#60;stdio.h&#62;</span>
+
+ <span class="dtype">int</span> <span class="white"> main()</span>
+ <span class="white">{</span>
+  <span class="dtype">int</span> <span class="white">i, arr[</span><span class="text"> 5 </span><span class="white">] = {</span><span class="text">3</span><span class="white">,</span></span><span class="text">43</span><span class="white">,</span></span><span class="text">23</span><span class="white">,</span></span><span class="text">4</span><span class="white">,</span></span><span class="text">2</span><span class="white">}, b = <span class="text">10</span><span class="white">;</span>
+  <span class="dtype">int *const</span> <span class="white">ptr = arr;</span>
+  <span class="white">ptr = &#38;b;</span>
+
+  <span class="loop">for</span><span class="white">(i = </span> <span class="text">0</span> <span class="white">; i &#60; </span> <span class="text">5</span><span class="white">; i++)</span>
+   <span class="white">*(ptr + i) = i;</span>
+
+  <span class="loop">for</span><span class="white">(i = </span> <span class="text">0</span> <span class="white">; i &#60; </span> <span class="text">5</span><span class="white">; i++)</span>
+   <span class="white">printf(</span> <span class="text">&#34;</span><span class="textmodf">\n %u</span> <span class="text">&#34;</span><span class="white">, *(ptr + i));</span>
+
+  <span class="white">return 0;</span>
+  <span class="white">}</span>
+
+</div>
+</pre>
+
+<h3><u>Compilation error</u></h3>
+<pre>
+<div class="codee"><span class="error">
+ t3.cpp: In function &#39;int main()&#39;
+ t3.cpp:7:6: error: assignment of read-only variable &#39;ptr&#39;
+    ptr=&b;
+       ^
+</span>
+</div>
+</pre>
+
+<h3>Conclusion: </h3>
+<ol type="1">
+<li>The data pointed by <b>ptr</b> can be modified using pointer. (i.e. <b>*ptr = 1;&nbsp;&nbsp;&nbsp;&nbsp;*ptr = 2;</b>&nbsp;&nbsp;&nbsp;&nbsp;is valid).</li>
+<li>The data of array can be modified (i.e <b>a[0]=1;&nbsp;&nbsp;&nbsp;&nbsp;a[0]=2;</b>&nbsp;&nbsp;&nbsp;&nbsp;is valid).</li>
+<li>Adressed stored in <b>ptr</b> cannot be modified i.e <b>ptr = &#38;b;&nbsp;&nbsp;&nbsp;&nbsp;ptr = &#38;c;</b>&nbsp;&nbsp;&nbsp;&nbsp;(assuming <code>int b,c;</code>), is invalid.</li>
+</ol>
+
+</br>
+</br>
+</br>
+</br>
+
+<h1 align="center" id="const_int_const*"><u>const int *const ptr;</u></h1>
+<!--******************const int *const ptr*********************-->
+<pre>
+<div class="codee">
+ <span class="preprocess">#include</span> <span class="text">&#60;stdio.h&#62;</span>
+
+ <span class="dtype">int</span> <span class="white"> main()</span>
+ <span class="white">{</span>
+  <span class="dtype">int</span> <span class="white">i, arr[</span><span class="text"> 5 </span><span class="white">] = {</span><span class="text">3</span><span class="white">,</span></span><span class="text">43</span><span class="white">,</span></span><span class="text">23</span><span class="white">,</span></span><span class="text">4</span><span class="white">,</span></span><span class="text">2</span><span class="white">}, b = </span><span class="text">10</span><span class="white">;</span>
+  <span class="dtype">const int *const</span> <span class="white">ptr = &#38;b;</span>
+  <span class="white">ptr = arr;</span>
+
+  <span class="loop">for</span><span class="white">(i = </span> <span class="text">0</span> <span class="white">; i &#60; </span> <span class="text">5</span><span class="white">; i++)</span>
+   <span class="white">*(ptr + i) = i;</span>
+
+  <span class="loop">for</span><span class="white">(i = </span> <span class="text">0</span> <span class="white">; i &#60; </span> <span class="text">5</span><span class="white">; i++)</span>
+   <span class="white">printf(</span> <span class="text">&#34;</span><span class="textmodf">\n %u</span> <span class="text">&#34;</span><span class="white">, *(ptr + i));</span>
+
+  <span class="white">return 0;</span>
+  <span class="white">}</span>
+
+</div>
+</pre>
+
+<h3><u>Compilation error</u></h3>
+<pre>
+<div class="codee"><span class="error">
+ trial.c: In function &#39;main&#39;:
+ trial.c:8:7: error: assignment of read-only variable &#39;ptr&#39;
+    ptr = arr;
+        ^
+ trial.c:11:15: error: assignment of read-only location 
+ &#39;*(ptr + (sizetype)((long unsigned int)i * 4ul))&#39;
+     *(ptr + i) = i;
+                ^
+</span>
+</div>
+</pre>
+<h3>Conclusion: </h3>
+<ol type="1">
+<li>The data pointed by ptr cannot be modified using pointer. (i.e. <b>*ptr = 1;&nbsp;&nbsp;&nbsp;&nbsp;*ptr = 2;</b>&nbsp;&nbsp;&nbsp;&nbsp;is invalid). </li>
+<li>The data of array can be modified (i.e <b>a[0] = 1;&nbsp;&nbsp;&nbsp;&nbsp; a[0] = 2;&nbsp;&nbsp;&nbsp;&nbsp;</b> is valid).</li>
+<li>Adressed stored in ptr cannot be modified i.e <b>ptr = &#38;b;&nbsp;&nbsp;&nbsp;&nbsp;ptr = &#38;c;</b>&nbsp;&nbsp;&nbsp;&nbsp; (assuming <code>int b,c;</code>), is invalid.</li>
+</ol>
+</td>
+
+<td class="adv"></td>
+</tr>
+</table>
+
+<!-- **************************************************TABLE 13******************************************************************************************************-->
+
+<table width=100% cellspacing="5" id="2d">
+<!--*********************ROW 1*************************************-->
+<tr>
+<td class="adv"></td>
+
+
+<td class="main">
+<h1 align="center"><u>Implementation of 2-D array</u></h1>
+<p>Okay so till now we know that 2-D array consists of rows and columns. But do they exactly look like a matrix on the memory?</p> 
+<p>We refer to consecutive blocks for 1-D array, matrix for 2-D array, cube for 3-D array. But then what for 4-D, 5-D and further dimensional array? </p>
+<p>Note: We <b>&#34;Refer&#34;</b>. 
+<p>Actually, all different multi-dimensional arrays are stored in form of 1-D array, i.e. consecutive blocks of memory. That is something huge to digest, but this is how everything works.  </p>
+<p>Let us consider this code first for better understanding. </p>
+
+<pre>
+<div class="codee">
+ <span class="preprocess">#include</span> <span class="text">&#60;stdio.h&#62;</span>
+
+ <span class="dtype">int</span> <span class="white"> main()</span>
+ <span class="white">{</span>
+  <span class="dtype">int</span> <span class="white">i, j, arr2[</span><span class="text"> 3 </span><span class="white">] [</span><span class="text"> 5 </span><span class="white">];</span>
+
+ <span class="comment">/*printing address of each element of array*/</span>
+  <span class="loop">for</span><span class="white">(i = </span> <span class="text">0</span> <span class="white">; i &#60; </span> <span class="text">3</span><span class="white">; i++)</span>
+   <span class="loop">for</span><span class="white">(j = </span> <span class="text">0</span> <span class="white">; j &#60; </span> <span class="text">5</span><span class="white">; j++)</span>
+    <span class="white">printf(</span> <span class="text">&#34;</span><span class="textmodf">\n</span><span class="text"> Address of arr2[</span><span class="textmodf">%d</span><span class="text">][</span><span class="textmodf">%d</span><span class="text">]: </span><span class="textmodf">%u</span><span class="text">&#34;</span><span class="white">, i, j, &#38;arr2[i][j]);</span>
+
+ <span class="comment">/*printing the value inside arr2*/</span>
+   <span class="white">printf(</span> <span class="text">&#34;</span><span class="textmodf">\n\n</span><span class="text"> Value inside arr2: <span class="textmodf">%u\n</span><span class="text">&#34;</span><span class="white">, arr2);</span>
+
+ <span class="comment">/*printing the address of arr2[i][0]*/</span>
+  <span class="loop">for</span><span class="white">(i = </span> <span class="text">0</span> <span class="white">; i &#60; </span> <span class="text">3</span><span class="white">; i++)</span>
+    <span class="white">printf(</span> <span class="text">&#34;</span><span class="textmodf">\n\t</span><span class="text"> Address of arr2[</span><span class="textmodf">%d</span><span class="text">][0]: </span><span class="textmodf">%u</span><span class="text">&#34;</span><span class="white">, i,  &#38;arr2[i][0]);</span>
+
+ <span class="comment">/*printing the value inside arr2[i]*/</span>
+  <span class="loop">for</span><span class="white">(i = </span> <span class="text">0</span> <span class="white">; i &#60; </span> <span class="text">3</span><span class="white">; i++)</span>
+    <span class="white">printf(</span> <span class="text">&#34;</span><span class="textmodf">\n</span><span class="text"> Value inside arr2[</span><span class="textmodf">%d</span><span class="text">]: </span><span class="textmodf">%u</span><span class="text">&#34;</span><span class="white">, i, arr2[i]);</span>
+
+ <span class="comment">/*printing the value inside *(arr2 + i)*/</span>
+  <span class="loop">for</span><span class="white">(i = </span> <span class="text">0</span> <span class="white">; i &#60; </span> <span class="text">3</span><span class="white">; i++)</span>
+    <span class="white">printf(</span> <span class="text">&#34;</span><span class="textmodf">\n\t</span><span class="text">Value inside arr2[</span><span class="textmodf">%d</span><span class="text">] *(arr2 + i) style: </span><span class="textmodf">%u</span><span class="text">&#34;</span><span class="white">, i, *(arr2 + i));</span>
+
+ <span class="comment">/*printing the addrss of arr2[i]*/</span>
+  <span class="loop">for</span><span class="white">(i = </span> <span class="text">0</span> <span class="white">; i &#60; </span> <span class="text">3</span><span class="white">; i++)</span>
+    <span class="white">printf(</span> <span class="text">&#34;</span><span class="textmodf">\n </span><span class="text">Address of arr2[</span><span class="textmodf">%d</span><span class="text">]: </span><span class="textmodf">%u</span><span class="text">&#34;</span><span class="white">, i, &arr2[i]);</span>
+
+  <span class="white">return 0;</span>
+  <span class="white">}</span>
+
+</div>
+</pre>
+
+<h3><u>Output</u></h3>
+
+<pre>
+<div class="codee"><span class="white">
+ Address of arr2[0][0]: 2675608160
+ Address of arr2[0][1]: 2675608164
+ Address of arr2[0][2]: 2675608168
+ Address of arr2[0][3]: 2675608172
+ Address of arr2[0][4]: 2675608176
+ Address of arr2[1][0]: 2675608180
+ Address of arr2[1][1]: 2675608184
+ Address of arr2[1][2]: 2675608188
+ Address of arr2[1][3]: 2675608192
+ Address of arr2[1][4]: 2675608196
+ Address of arr2[2][0]: 2675608200
+ Address of arr2[2][1]: 2675608204
+ Address of arr2[2][2]: 2675608208
+ Address of arr2[2][3]: 2675608212
+ Address of arr2[2][4]: 2675608216
+
+ Value inside arr2: 2675608160
+
+	 Address of arr2[0][0]: 2675608160
+	 Address of arr2[1][0]: 2675608180
+	 Address of arr2[2][0]: 2675608200
+
+ Value inside arr2[0]: 2675608160
+ Value inside arr2[1]: 2675608180
+ Value inside arr2[2]: 2675608200
+
+	Value inside arr2[0 *(arr2 + i) style]: 2675608160
+	Value inside arr2[1 *(arr2 + i) style]: 2675608180
+	Value inside arr2[2 *(arr2 + i) style]: 2675608200
+
+ Address of arr2[0]: 2675608160
+ Address of arr2[1]: 2675608180
+ Address of arr2[2]: 2675608200
+
+</span>
+</div>
+</pre>
+
+<p>First let us take look a on the addresses of <b>arr2[i][j]</b>. They are all consecutive. Hence, we can conclude that a single chain of blocks (each of 4 bytes) is allotted to our 2-D array, same can be checked for 3-D or 4-D array. </p>
+
+<div>
+<table width=100% border="2" bordercolor="#6495ED" cellpadding="4" cellspacing="0"style="font-family: Arial Black, Gadget, sans-serif; font-style: normal;  font-size: 1em; font-variant: normal; font-weight: bold;">
+
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><font color="#ffffff">t</font></td>
+</tr>
+
+
+<tr>
+<td>[0]&nbsp;[0]</td>
+<td>[0]&nbsp;[1]</td>
+<td>[0]&nbsp;[2]</td>
+<td>[0]&nbsp;[3]</td>
+<td>[0]&nbsp;[4]</td>
+<td>[1]&nbsp;[0]</td>
+<td>[1]&nbsp;[1]</td>
+<td>[1]&nbsp;[2]</td>
+<td>[1]&nbsp;[3]</td>
+<td>[1]&nbsp;[4]</td>
+<td>[2]&nbsp;[0]</td>
+<td>[2]&nbsp;[1]</td>
+<td>[2]&nbsp;[2]</td>
+<td>[2]&nbsp;[3]</td>
+<td>[2]&nbsp;[4]</td>
+</tr>
+</table>
+</div>
+
+<p>So, what is happening? </p>
+
+<p>&#8692; When you access <b>arr2[0][0]</b>, for you it is, 1<sup>st</sup> column of 1<sup>st</sup> row. But for C/C++ it is, 1<sup>st</sup> element of 1<sup>st</sup> memory group of 5 (&#39;5&#39; because we have defined number of columns to be five). </p> 
+
+<p>&#8692; When you access <b>arr2[1][3]</b>, for you its 4<sup>th</sup> element of 2<sup>nd</sup> row, but for C/C++ it is 4<sup>th</sup> element of <sup>2nd</sup> memory group of 5. When it reads <b>arr2[1]</b>, it jumps 5 blocks from 1<sup>st</sup> element, i.e. it reaches to 2<sup>nd</sup> memory group and then access its 4<sup>th</sup> element. </p>
+<p><span class="error"><b>
+<u>Note:</u> Do not get confused with row-major-form and column-major-form. That has to do something with how you have stored data. But memory is allotted in the same sequence depicted above. And this is also confirmed by the above code. 
+</b></span></p>
+<p>As we said before, C/C++ is a language, not for your machine, but for your compiler. </p> 
+
+<h2><u>Observations:</u></h2>
+<ol type="1">
+<li><p>
+<b>arr2</b> and <b>arr2[0]</b> conatin same value, that is, the address of <b>arr2[0][0]</b>.
+</p></li>
+
+<li><p>
+Address of <b>arr[0], arr[1], arr[2]</b> is same as of address of first column of each row, i.e.,
+<div>
+<table width=100% border="2" bordercolor="#000000" cellpadding="4" cellspacing="0"style="font-family: Arial Black, Gadget, sans-serif; font-style: normal;  font-size: 1em; font-variant: normal; font-weight: bold;">
+<tr>
+<td> &#38;arr[0]</td>
+<td> is same as </td>
+<td> &#38;arr[0][0]</td>
+<td> is same as</td>
+<td> arr2 + 0</td>
+</tr>
+
+<tr>
+<td> &#38;arr[1]</td>
+<td> is same as </td>
+<td> &#38;arr[1][0]</td>
+<td> is same as</td>
+<td> arr2 + 1</td>
+</tr>
+
+<tr>
+<td> &#38;arr[2]</td>
+<td> is same as </td>
+<td> &#38;arr[2][0]</td>
+<td> is same as</td>
+<td> arr2 + 2</td>
+</tr>
+
+</table>
+</div> 
+</p></li>
+</ol>
+
+<h2><u>Conclusion</u></h2>
+<ol type="1">
+<li><p>
+There is no real, physical existence of <b>arr2[0], arr2[1]</b> and <b>arr2[2]</b>. They are handled virtually. They are just sytanx for which the C/C++ returns the address of first column for particular rows.</p></li> 
+
+<li><p><b>arr2 point to whole row. It is of 'int&nbsp;(*ptr)[]' type. It means for them bytes acquired by no_of_elements define in '[&nbsp;]' is considered as one single block of memory. So if you apply arithmetic operation on them, they won&#39;t add <code>sizeof(&#60;data-type&#62;)</code> to the address stored in them. They will add the total number of bytes stored in that memory block.</b>. <i>(This is to be understood properly as things will change during dynamic allocation of 2-D array)</i>.
+</p></li>
+
+<li><p>
+<i>(On my system size of int is 4)</i> When 2-D array is declared and initialized, referring to above code,<code> 3&nbsp;*&nbsp;5&nbsp;*&nbsp;sizeof(int)&nbsp;=&nbsp;60</code> bytes are alloted for array and 4 bytes are alloted for arr2 which points to first element of memory sequence of 2-D array. 
+</p></li>
+</ol>
+
+<p>We saw, 2-D array also work on the concept similar to pointers. Means they should implement arithmetic operations. They do, but not it that simple way.</p>
+<ol type="1">
+<li><p><b>*(arr2 + i)</b>, returns the address of first element of i<sup>th</sup> row.</p></li>
+<li><p>If we dereference it again, it will access the value at that address. Hence, <b>*(*(arr2 + i))</b> will access the value stored in 1<sup>st</sup> column of i<sup>th</sup> row.</p></li>
+<li><p>Now we saw, <b>arr2 + i</b> or <b>arr2[i]</b> returns the address of 1<sup>st</sup> column of i<sup>th</sup> row. We also saw, how memory is alloted for 2-D array. Thus if we do this, <b>*(*(arr2 + i) + j)</b>,  we will be able to access <b>j<sup>th</sup></b> column of <b>i<sup>th</sup></b> row.</p></li>
+</ol>
+
+<p>Consider this code: </p>
+<pre>
+<div class="codee">
+ <span class="preprocess">#include</span> <span class="text">&#60;stdio.h&#62;</span>
+
+ <span class="dtype">int</span> <span class="white"> main()</span>
+ <span class="white">{</span>
+  <span class="dtype">int</span> <span class="white">i, j, arr2[</span><span class="text"> 3 </span><span class="white">] [</span><span class="text"> 5 </span><span class="white">];</span>
+
+  <span class="loop">for</span><span class="white">(i = </span> <span class="text">0</span> <span class="white">; i &#60; </span> <span class="text">3</span><span class="white">; i++)</span>
+   <span class="loop">for</span><span class="white">(j = </span> <span class="text">0</span> <span class="white">; j &#60; </span> <span class="text">5</span><span class="white">; j++)</span>
+    <span class="white">*(*(arr2 + i) + j) = 5 * i + j;</span>
+
+  <span class="loop">for</span><span class="white">(i = </span> <span class="text">0</span> <span class="white">; i &#60; </span> <span class="text">3</span><span class="white">; i++)</span>
+   <span class="loop">for</span><span class="white">(j = </span> <span class="text">0</span> <span class="white">; j &#60; </span> <span class="text">5</span><span class="white">; j++)</span>
+    <span class="white">printf(</span> <span class="text">&#34;</span><span class="textmodf">\n</span><span class="text"> Value inside arr2[</span><span class="textmodf">%d</span><span class="text">][</span><span class="textmodf">%d</span><span class="text">]: </span><span class="textmodf">%u</span><span class="text">&#34;</span><span class="white">, i, j, arr2[i][j]);</span>
+
+  <span class="white">return</span> <span class="text">0;</span>
+
+  <span class="white">}</span>
+
+</div>
+</pre>
+
+<h3><u>Output</u></h3>
+
+<pre>
+<div class="codee"><span class="white">
+ Value inside arr2[0][0]: 0
+ Value inside arr2[0][1]: 1
+ Value inside arr2[0][2]: 2
+ Value inside arr2[0][3]: 3
+ Value inside arr2[0][4]: 4
+ Value inside arr2[1][0]: 5
+ Value inside arr2[1][1]: 6
+ Value inside arr2[1][2]: 7
+ Value inside arr2[1][3]: 8
+ Value inside arr2[1][4]: 9
+ Value inside arr2[2][0]: 10
+ Value inside arr2[2][1]: 11
+ Value inside arr2[2][2]: 12
+ Value inside arr2[2][3]: 13
+ Value inside arr2[2][4]: 14
+</span>
+</div>
+</pre>
+
+<p><b><u>Result:</u></b> First we accessed the <b>j<sup>th</sup></b> column of <b>i<sup>th</sup></b> row, using <b>*(*(arr2 + i) + j)</b> while storing values. Then we accessed it using <b>arr2[i][j]</b> while printing. That means:</p>
+<h2 align="center">arr2[i][j]&nbsp;&nbsp;&nbsp;&nbsp;is same as&nbsp;&nbsp;&nbsp;&nbsp;*(*(arr2 + i) + j)</h2>
+
+</td>
+
+<td class="adv"></td>
+</tr>
+</table>
+
+<!-- **************************************************TABLE 14******************************************************************************************************-->
+
+<table width=100% cellspacing="5" id="point_2d">
+<!--*********************ROW 1*************************************-->
+<tr>
+<td class="adv"></td>
+
+
+<td class="main">
+<h1 align="center"><u>Pointer to a 2-D array</u></h1>
+<p>Now we know from above examples that how 2-D array is implemented on our memory.</p>
+<p>So, we will try to access 2-D array with the help of a pointer.</p>
+
+<p><b><u>Note:</u></b> This is different from what we saw just above. Because as we told, C/C++ is a language for your compiler. When you declare a 2-D array <b>arr2[3][5]</b>, C/C++ knows that <b>arr2</b> is the identifier of given 2-D array and the meaning of <b>arr2[i]</b> is to return the address of 1<sup>st</sup> element of i<sup>th</sup> row. 
+</br></br>But when we store the value of <b>arr2</b> in a pointer, pointer does not know what is 2-D or 3-D array, it only knows to point data and how to access it. It does not know that for 2-D array, <b>ptr[i]</b> has to return the address of i<sup>th</sup> row. For pointer 2-D array is same as 1-D array, because it is saved in the same form in the memory, a consecutive sequence of integer bytes. Thus, <b>ptr[i] is same as *(ptr + i)</b>. Thus it will go at that address and access its value.  </p>
+
+<p>But, we know how 2-D array is saved in our memory (in form of 1-D array), we formulated this equation. </p>
+
+<p> For <b>3 x 5</b> 2-D array, (i,j)<sup>th</sup> element will be <b>*(ptr + (i * 5) + j)</b> where <b>0 &#8804; i &#60; 3</b>.</p>
+
+<p>For general: <span class="error"><i><b>*(&#60;pointer_name&#62; + (i * no_of_cols) + j)</b></i></span> where <b>0 &#8804; i &#60; no_of_rows</b> and <b>0 &#8804; i &#60; no_of_cols</b>.</p>
+
+
+
+<pre>
+<div class="codee">
+ <span class="preprocess">#include</span> <span class="text">&#60;stdio.h&#62;</span>
+
+ <span class="dtype">int</span> <span class="white"> main()</span>
+ <span class="white">{</span>
+  <span class="dtype">int</span> <span class="white">i, j, *ptr, arr2[</span><span class="text"> 3 </span><span class="white">] [</span><span class="text"> 5 </span><span class="white">];</span>
+
+  <span class="white">ptr = arr2;</span>
+
+  <span class="loop">for</span><span class="white">(i = </span> <span class="text">0</span> <span class="white">; i &#60; </span> <span class="text">3</span><span class="white">; i++)</span>
+   <span class="loop">for</span><span class="white">(j = </span> <span class="text">0</span> <span class="white">; j &#60; </span> <span class="text">5</span><span class="white">; j++)</span>
+    <span class="white">arr2[i][j] = 6 * i + j * 2;</span><span class="comment">//saving any non-realted value</span>
+
+  <span class="loop">for</span><span class="white">(i = </span> <span class="text">0</span> <span class="white">; i &#60; </span> <span class="text">3</span><span class="white">; i++)</span>
+   <span class="loop">for</span><span class="white">(j = </span> <span class="text">0</span> <span class="white">; j &#60; </span> <span class="text">5</span><span class="white">; j++)</span>
+    <span class="white">printf(</span> <span class="text">&#34;</span><span class="textmodf">\n</span><span class="text"> Value inside arr2[</span><span class="textmodf">%d</span><span class="text">][</span><span class="textmodf">%d</span><span class="text">]: </span><span class="textmodf">%u</span><span class="text">&#34;</span><span class="white">, i, j, arr2[i][j]);</span>
+
+<span class="loop">for</span><span class="white">(i = </span> <span class="text">0</span> <span class="white">; i &#60; </span> <span class="text">3</span><span class="white">; i++)</span>
+   <span class="loop">for</span><span class="white">(j = </span> <span class="text">0</span> <span class="white">; j &#60; </span> <span class="text">5</span><span class="white">; j++)</span>
+    <span class="white">printf(</span> <span class="text">&#34;</span><span class="textmodf">\n\t</span><span class="text">Value inside arr2[</span><span class="textmodf">%d</span><span class="text">][<span class="textmodf">%d</span><span class="text">] *(ptr+(i*5)+j): </span><span class="textmodf">%u</span><span class="text">&#34;</span><span class="white">, i, j, *(ptr+(i*5)+j));</span>
+
+
+  <span class="white">return</span> <span class="text">0;</span>
+
+  <span class="white">}</span>
+
+</div>
+</pre>
+
+<h3><u>Output</u></h3>
+
+<pre>
+<div class="codee"><span class="white">
+ Value inside arr2[0][0]: 0
+ Value inside arr2[0][1]: 2
+ Value inside arr2[0][2]: 4
+ Value inside arr2[0][3]: 6
+ Value inside arr2[0][4]: 8
+ Value inside arr2[1][0]: 6
+ Value inside arr2[1][1]: 8
+ Value inside arr2[1][2]: 10
+ Value inside arr2[1][3]: 12
+ Value inside arr2[1][4]: 14
+ Value inside arr2[2][0]: 12
+ Value inside arr2[2][1]: 14
+ Value inside arr2[2][2]: 16
+ Value inside arr2[2][3]: 18
+ Value inside arr2[2][4]: 20
+
+	Value inside arr2[0][0] *(ptr+(i*5)+j): 0
+	Value inside arr2[0][1] *(ptr+(i*5)+j): 2
+	Value inside arr2[0][2] *(ptr+(i*5)+j): 4
+	Value inside arr2[0][3] *(ptr+(i*5)+j): 6
+	Value inside arr2[0][4] *(ptr+(i*5)+j): 8
+	Value inside arr2[1][0] *(ptr+(i*5)+j): 6
+	Value inside arr2[1][1] *(ptr+(i*5)+j): 8
+	Value inside arr2[1][2] *(ptr+(i*5)+j): 10
+	Value inside arr2[1][3] *(ptr+(i*5)+j): 12
+	Value inside arr2[1][4] *(ptr+(i*5)+j): 14
+	Value inside arr2[2][0] *(ptr+(i*5)+j): 12
+	Value inside arr2[2][1] *(ptr+(i*5)+j): 14
+	Value inside arr2[2][2] *(ptr+(i*5)+j): 16
+	Value inside arr2[2][3] *(ptr+(i*5)+j): 18
+	Value inside arr2[2][4] *(ptr+(i*5)+j): 20
+
+</span>
+</div>
+</pre>
+
+<p><span class="error"><b><i>Though it shows warning for incompatible pointer assignment on some compilers. But it works well.</span></i></b></p>
+</br>
+</br>
+</br>
+</br>
+<h1 align="center">Correct way: <code>int *ptr[]</code></h1>
+<p>Like we define integer array, <code><b>int arr[]</b></code> of which each element is an integer; here we will define integer-pointer array, <code><b>int *ptr[]</b></code>, of which element is an integer-pointer. <i>(<u>Note: </u><b>int *ptr[]</b> is very-very different from <b>int (*ptr)[]</b>).</i></p>
+
+<p>Now for the above array of 3x5 type, we will define integer pointer array with 3 elements.</p>
+<pre>
+<div class="codee">
+ <span class="preprocess">#include</span> <span class="text">&#60;stdio.h&#62;</span>
+
+ <span class="dtype">int</span> <span class="white"> main()</span>
+ <span class="white">{</span>
+  <span class="dtype">int</span> <span class="white">i, j, arr2[</span><span class="text"> 3 </span><span class="white">] [</span><span class="text"> 5 </span><span class="white">];</span>
+
+  <span class="dtype">int</span> <span class="white">*ptr[</span><span class="text">3</span><span class="white">] = { arr2[</span><span class="text">0</span><span class="white">], arr2[</span><span class="text">1</span><span class="white">], arr2[</span><span class="text">2</span><span class="white">]};</span>
+
+  <span class="loop">for</span><span class="white">(i = </span> <span class="text">0</span> <span class="white">; i &#60; </span> <span class="text">3</span><span class="white">; i++)</span>
+   <span class="loop">for</span><span class="white">(j = </span> <span class="text">0</span> <span class="white">; j &#60; </span> <span class="text">5</span><span class="white">; j++)</span>
+    <span class="white">arr2[i][j] = 6 * i + j * 2;</span><span class="comment">//saving any non-realted value</span>
+
+  <span class="loop">for</span><span class="white">(i = </span> <span class="text">0</span> <span class="white">; i &#60; </span> <span class="text">3</span><span class="white">; i++)</span>
+   <span class="loop">for</span><span class="white">(j = </span> <span class="text">0</span> <span class="white">; j &#60; </span> <span class="text">5</span><span class="white">; j++)</span>
+    <span class="white">printf(</span> <span class="text">&#34;</span><span class="textmodf">\n</span><span class="text"> Value inside arr2[</span><span class="textmodf">%d</span><span class="text">][</span><span class="textmodf">%d</span><span class="text">]: </span><span class="textmodf">%u</span><span class="text">&#34;</span><span class="white">, i, j, arr2[i][j]);</span>
+
+  <span class="loop">for</span><span class="white">(i = </span> <span class="text">0</span> <span class="white">; i &#60; </span> <span class="text">3</span><span class="white">; i++)</span>
+   <span class="loop">for</span><span class="white">(j = </span> <span class="text">0</span> <span class="white">; j &#60; </span> <span class="text">5</span><span class="white">; j++)</span>
+    <span class="white">printf(</span> <span class="text">&#34;</span><span class="textmodf">\n\t</span><span class="text">Value inside arr2[</span><span class="textmodf">%d</span><span class="text">][<span class="textmodf">%d</span><span class="text">] *((ptr+i)+j): </span><span class="textmodf">%u</span><span class="text">&#34;</span><span class="white">, i, j, *(*(ptr+i)+j));</span>
+
+
+  <span class="white">return</span> <span class="text">0;</span>
+
+  <span class="white">}</span>
+
+</div>
+</pre>
+
+<h3><u>Output</u></h3>
+<pre>
+<div class="codee"><span class="white">
+ Value inside arr2[0][0]: 0
+ Value inside arr2[0][1]: 2
+ Value inside arr2[0][2]: 4
+ Value inside arr2[0][3]: 6
+ Value inside arr2[0][4]: 8
+ Value inside arr2[1][0]: 6
+ Value inside arr2[1][1]: 8
+ Value inside arr2[1][2]: 10
+ Value inside arr2[1][3]: 12
+ Value inside arr2[1][4]: 14
+ Value inside arr2[2][0]: 12
+ Value inside arr2[2][1]: 14
+ Value inside arr2[2][2]: 16
+ Value inside arr2[2][3]: 18
+ Value inside arr2[2][4]: 20
+
+	Value inside arr2[0][0] *((ptr+i)+j): 0
+	Value inside arr2[0][1] *((ptr+i)+j): 2
+	Value inside arr2[0][2] *((ptr+i)+j): 4
+	Value inside arr2[0][3] *((ptr+i)+j): 6
+	Value inside arr2[0][4] *((ptr+i)+j): 8
+	Value inside arr2[1][0] *((ptr+i)+j): 6
+	Value inside arr2[1][1] *((ptr+i)+j): 8
+	Value inside arr2[1][2] *((ptr+i)+j): 10
+	Value inside arr2[1][3] *((ptr+i)+j): 12
+	Value inside arr2[1][4] *((ptr+i)+j): 14
+	Value inside arr2[2][0] *((ptr+i)+j): 12
+	Value inside arr2[2][1] *((ptr+i)+j): 14
+	Value inside arr2[2][2] *((ptr+i)+j): 16
+	Value inside arr2[2][3] *((ptr+i)+j): 18
+	Value inside arr2[2][4] *((ptr+i)+j): 20
+</span>
+</div>
+</pre>
+
+<h2><u>Observations:</u></h2>
+<ol type="1">
+<li><p>For <b>arr2[3][5]</b>, we defined a pointer array of 3 elements, of which all three elements are also pointers of same data-type as of 2-D array.</p></li>
+<li><p>Now, we save the address of 1<sup>st</sup> element of 1<sup>st</sup> row in <b>ptr[0]</b>, address of 1<sup>st</sup> element of 2<sup>nd</sup> row in <b>ptr[1]</b> and address of 1<sup>st</sup> element of 3<sup>rd</sup> row in ptr[2].</p></li>
+<li><p>And <b>ptr</b><i> (identifier) </i>is pointing to <b>ptr[0]</b> as normally arrays do.</p></li>
+</ol>
+<p>Thus:</p>
+
+<div>
+<table width=100% border="2" bordercolor="#000000" cellpadding="4" cellspacing="0"style="font-family: Arial Black, Gadget, sans-serif; font-style: normal;  font-size: 1em; font-variant: normal; font-weight: bold;">
+
+<tr>
+<td> ptr[0]</td>
+<td> is same as </td>
+<td> *(ptr + 0)</td>
+<td> is same as</td>
+<td> arr2[0]</td>
+<td> contains address of arr2[0][0]</td>
+</tr>
+
+<tr>
+<td> ptr[i]</td>
+<td> is same as </td>
+<td> *(ptr + i)</td>
+<td> is same as</td>
+<td> arr2[i]</td>
+<td> contains address of arr2[i][0]</td>
+</tr>
+
+</table>
+</div>
+
+<p>Now as we know that <b>*(ptr + i)</b> will return the address of 1<sup>st</sup> element of i<sup>th</sup> row, dereferencing it again will access the value at that place.</p>
+
+<p>Thus, <b>*(*(ptr+i)+j) = ptr[i][j] - same as- arr2[i][j]</b>, will access the (i,j)<sup>th</sup> element.</p>
+
+<span class="error"><b><i><u>Note</u>: There is no specific method. After knowing pointers and their working, we are just playing with one or the other method.</i></b></span>
+</td>
+
+
+
+<td class="adv"></td>
+</tr>
+</table>
+
+<!-- **************************************************TABLE 15******************************************************************************************************-->
+
+<table width=100% cellspacing="5" id="dynamic">
+<!--*********************ROW 1*************************************-->
+<tr>
+<td class="adv"></td>
+
+
+<td class="main">
+<h1 align="center"><u>Dynamic Allocation</u></h1>
+<p>As, now we know how to handle pointers and how to deal with them. We can now make real use of them, that is Dynamic Allocation of memory.</p> 
+<p>For example, the arrays (integer array, character array, structure array etc.) you define in your code, are static. Once defined, their size cannot be modified during run time. </p>
+<p>Suppose you made a program for general condition that inputs elements in an array. You define an empty array in your program with a fixed size. But what, if the fixed size is less than the number of elements you want to input in one of the test conditions?  </p>
+<p>Will you again modify your code and re-compile it? </p>
+<p>So, here we take advantage of dynamic allocation. Through this we can ask the user that how much memory is needed, and then it will be allocated. </p>
+<p>C has 3 predefined functions for allocating memory, and <b>free()</b> for de-allocation, under <b>"stdlib.h"</b> header file. </p>
+<pre>
+<div class="codee">
+  <span class="dtype">void</span><span class="white">* malloc(</span><span class="dtype">size_t</span><span class="comment"> /*size_in_bytes*/</span><span class="white">)</span>
+
+  <span class="dtype">void</span><span class="white">* calloc(</span><span class="dtype">size_t</span><span class="comment"> /*no_of_elements*/</span><span class="white">  ,  </span><span class="dtype">size_t</span><span class="comment"> /*size_in_bytes*/</span><span class="white">)</span>
+
+  <span class="dtype">void</span><span class="white">* realloc(</span><span class="dtype">void*</span><span class="comment"> /*address of previous data*/</span><span class="white">  ,  </span><span class="dtype">size_t</span><span class="comment"> /*size_in_bytes*/</span><span class="white">)</span>
+
+  <span class="white">free(</span><span class="dtype">void</span><span class="white">*</span><span class="comment"> /*address of dynamic data*/</span><span class="white">)</span>
+
+</div>
+</pre>
+
+<span class="error"><b><i><u>Note</u>: here we will discuss the general working of these functions. For other exceptions and return values, read the documentation of your compiler. </i></b></span>
+</td>
+
+<td class="adv"></td>
+</tr>
+</table>
+<!-- **************************************************TABLE 16******************************************************************************************************-->
+
+<table width=100% cellspacing="5" id="malloc">
+<!--*********************ROW 1*************************************-->
+<tr>
+<td class="adv"></td>
+
+
+<td class="main">
+<h1 align="center"><u>malloc()</u></h1>
+<p><center><i><a href=#use_malloc>Click here</a> to learn how to use <code><b>malloc()</b></code></i></center></p>
+<ol type="1">
+<li><p></p>Allocates a memory block of size, given to it as a parameter, in bytes. If it does it successfully, it returns the address of the first byte of the sequence.</li>
+<li><p>If it fails, it returns <b>NULL</b>. </p></li>
+<li><p>The value returned by it, is of <b>&#39;void&#39;</b> type. Hence it does not know that the memory it has allocated will be used as integer or character or float array or something other</p></li>
+<li><p>When the value returned by it is stored in a pointer. The behavior of that dynamically allocated memory block is now defined by the data-type of that pointer.</p></li>
+<li><p>Hence, it is the duty of programmer to calculate the number of bytes to be allocated, accordingly.</p></li>
+
+</ol>
+</br>
+</br>
+</br>
+</br>
+<h1 align="center"><u>void*</u></h1>
+<p>We know how to declare pointer: &#60;identifier&#62; *&#60;data-type&#62;. <code><b>void</b></code> is also a data type, as we know. So, pointer of type <b>void</b> points to void. It means it can point to variables of all data-types. This is an advantage because then we can use same memory block for storing either integer or char or float etc,</code></p>
+
+
+
+</td>
+
+<td class="adv"></td>
+</tr>
+</table>
+
+
+<!-- **************************************************TABLE 17******************************************************************************************************-->
+
+<table width=100% cellspacing="5" id="calloc">
+<!--*********************ROW 1*************************************-->
+<tr>
+<td class="adv"></td>
+
+
+<td class="main">
+<h1 align="center"><u>calloc()</u></h1>
+<p><center><i><a href=#dynamic_1d_calloc>Click here</a> to learn how to use <code><b>calloc()</b></code></i></center></p>
+
+<p>It accepts the number of elements of array, and size of each element of the array as a parameter. It itself calculates the number of bytes to be allocated and rest working is same as of malloc. </p>
+
+</td>
+
+<td class="adv"></td>
+</tr>
+</table>
+
+<!-- **************************************************TABLE 18******************************************************************************************************-->
+
+<table width=100% cellspacing="5" id="realloc">
+<!--*********************ROW 1*************************************-->
+<tr>
+<td class="adv"></td>
+
+
+<td class="main">
+<h1 align="center"><u>realloc()</u></h1>
+<p><center><i><a href=#dynamic_1d_realloc>Click here</a> to learn how to use <code><b>realloc()</b></code></i></center></p>
+
+<p>It re-allocates the memory, allocated by malloc/ calloc. It must be previously allocated by <b>malloc(), calloc() or realloc()</b> and not yet freed with a call to free or realloc. Otherwise, the results are undefined.</p>
+
+<p>The reallocation is done by either: </p>
+<ol type="a">
+<li><p>Expanding or contracting the existing area pointed to by ptr, if possible. The contents of the area remain unchanged up to the lesser of the new and old sizes. If the area is expanded, the contents of the new part of the array are undefined. </p></li>
+<li><p>allocating a new memory block of size new_size bytes, copying memory area with size equal the lesser of the new and the old sizes, and freeing the old block. </p></li>
+</ol>
+<p>If there is not enough memory, the old memory block is not freed and <b>NULL</b> pointer is returned. </p>
+</td>
+
+<td class="adv"></td>
+</tr>
+</table>
+<!-- **************************************************TABLE 19******************************************************************************************************-->
+
+<table width=100% cellspacing="5" id="free">
+<!--*********************ROW 1*************************************-->
+<tr>
+<td class="adv"></td>
+
+
+<td class="main">
+<h1 align="center"><u>free()</u></h1>
+<p>To understand this, we should understand the memeory map of C program.</p>
+<div>
+<table align="center" border="2" bordercolor="#ffffff" cellpadding="15" cellspacing="2"style="font-family: Arial Black, Gadget, sans-serif; font-style: normal;  font-size: 1.2em; font-variant: normal; font-weight: bold;">
+<tr>
+<td bgcolor="#000080" colspan="2" align="center"><font color="white">Stack</font></td>
+</tr>
+
+<tr>
+<td bgcolor="#B22222" colspan="2" align="center"><font color="white">Heap</font></td>
+</tr>
+
+<tr>
+<td bgcolor="#006400" align="center"><font color="white">Global Variable</font></td>
+<td bgcolor="#FA8702" align="center"><font color="white">Program code</font></td>
+</tr>
+
+</table>
+</div>
+
+<ol type="a">
+<li><p><b>Stack</b>- is used for storing all your static variables, function parameters, literals etc. </p></li>
+<li><p><b>Global variables</b>- as names defines, stores the global variables of your program.</p></li>
+<li><p><b>Program code</b>- as name defines, stores your executable program code. </p></li>
+<li><p><b>Heap</b>- this is used for dynamic allocation. </p></li>
+</ol>
+
+<p>Now all other memory blocks all handled by C, except heap. Heap is dedicated to be handled by user. Memory is allocated and freed, during run time, on function calls, by C for static variables. But it's not same for heap.</p> 
+<p>Once you allocate a memory, it is stored on heap, and will remain on heap till you free it or whole program is executed, because as we told, heap is dedicated to be manipulated by user..  </p>
+<p>For small programs, it is affordable but think of a situation where there is running a loop, and again and again malloc is called inside loop. </p>
+<p>If you will not free the memory after using it, a time will come when whole heap will be filled and no more space will be left. This is called as &#39;memory leak&#39;.</p> 
+<p>So, to avoid it, always free the memory after it is used. </p>
+
+
+</td>
+
+<td class="adv"></td>
+</tr>
+</table>
+
+<!-- **************************************************TABLE 20******************************************************************************************************-->
+
+<table width=100% cellspacing="5" id="use_malloc">
+<!--*********************ROW 1*************************************-->
+<tr>
+<td class="adv"></td>
+
+
+<td class="main">
+<h1 align="center"><u>Implementing <code>malloc()</code></u></h1>
+<pre>
+<div class="codee">
+ <span class="preprocess">#include</span> <span class="text">&#60;stdio.h&#62;</span>
+ <span class="preprocess">#include</span> <span class="text">&#60;stdlib.h&#62;</span>
+
+ <span class="dtype">int</span> <span class="white"> main()</span>
+ <span class="white">{</span>
+  <span class="dtype">int</span> <span class="white">*ptr = NULL, i;</span>
+
+  <span class="white">ptr = (</span><span class="dtype">int</span><span class="white">*)malloc(</span><span class="loop">sizeof</span><span class="white">(</span><span class="dtype">int</span><span class="white">));</span>
+
+  <span class="loop">if</span><span class="white">(ptr == NULL)</span>
+  <span class="white">{</span>
+   <span class="white">printf(</span><span class="text">&#34;Error: Could not allocate memory.&#34;</span><span class="white">);</span>
+   <span class="white">return</span> <span class="text">0</span><span class="white">;</span>
+   <span class="white">}</span>
+
+  <span class="white">*ptr = </span><span class="text">5</span><span class="white">;</span>
+
+  <span class="white">printf(</span> <span class="text">&#34;</span> <span class="textmodf">\n%u</span> <span class="text">&#34;</span><span class="white">, *ptr);</span>
+
+  <span class="white">free(ptr);</span>
+  <span class="white">return</span> <span class="text">0</span><span class="white">;</span>
+  <span class="white">}</span>
+
+</div>
+</pre>
+
+<h3><u>Output</u></h3>
+<pre>
+<div class="codee"><span class="white">
+ 5
+</span>
+</div>
+</pre>
+
+
+
+<ol type="1">
+<li><p>Here a block of  <b><code>sizeof(int)</code></b> bytes is allocated on to the memory, and address of first byte is returned. </p></li>
+<li><p>We explicitly converted the <b><code>void*</code></b>, returned by malloc, to <code><b>int*</b></code> by placing <code><b>(int*)</b></code> before calling malloc.</p></li>
+<li><p>Then that dynamic memory can be accessed and manipulated. </p></li>
+</ol>
+
+
+</td>
+
+<td class="adv"></td>
+</tr>
+</table>
+<!-- **************************************************TABLE 21******************************************************************************************************-->
+
+<table width=100% cellspacing="5" id="dynamic_1d">
+<!--*********************ROW 1*************************************-->
+<tr>
+<td class="adv"></td>
+
+
+<td class="main">
+<h1 align="center"><u>Dynamic allocation of 1-D array</u></h1>
+
+<pre>
+<div class="codee">
+ <span class="preprocess">#include</span> <span class="text">&#60;stdio.h&#62;</span>
+ <span class="preprocess">#include</span> <span class="text">&#60;stdlib.h&#62;</span>
+
+ <span class="dtype">int</span> <span class="white"> main()</span>
+ <span class="white">{</span>
+  <span class="dtype">int</span> <span class="white">*ptr = NULL, i, n;</span>
+
+  <span class="white">printf(</span><span class="text">&#34;Enter the number of elements in your array: &#34;</span><span class="white">);</span>
+  <span class="white">scanf(</span><span class="text">&#34;</span><span class="textmodf">%d</span><span class="text">&#34;</span><span class="white">, &#38;n);
+
+  <span class="white">ptr = (</span><span class="dtype">int</span><span class="white">*)malloc(</span><span class="loop">sizeof</span><span class="white">(</span><span class="dtype">int</span><span class="white">)* n);</span>
+
+  <span class="loop">if</span><span class="white">(ptr == NULL)</span>
+  <span class="white">{</span>
+   <span class="white">printf(</span><span class="text">&#34;Error: Could not allocate memory.&#34;</span><span class="white">);</span>
+   <span class="white">return</span> <span class="text">0</span><span class="white">;</span>
+   <span class="white">}</span>
+
+  <span class="loop">for</span><span class="white">(i = </span> <span class="text">0</span> <span class="white">; i &#60; </span> <span class="white">n</span><span class="white">; i++)</span>
+   <span class="white">scanf(</span><span class="text">&#34;</span><span class="textmodf">%d</span><span class="text">&#34;</span><span class="white">, ptr + i);
+
+  <span class="loop">for</span><span class="white">(i = </span> <span class="text">0</span> <span class="white">; i &#60; </span> <span class="white">n</span><span class="white">; i++)</span>
+   <span class="white">printf(</span> <span class="text">&#34;</span> <span class="textmodf">%d</span> <span class="text">&#34;</span><span class="white">, *(ptr + i));</span>
+
+  <span class="white">free(ptr);</span>
+  <span class="white">return</span> <span class="text">0</span><span class="white">;</span>
+  <span class="white">}</span>
+
+</div>
+</pre>
+
+<h3><u>Output</u></h3>
+<pre>
+<div class="codee"><span class="white">
+ Enter the number of elements in your array: 4 
+
+ 1 
+ 2 
+ 3 
+ 4 
+
+ 1 2 3 4 
+</span>
+</div>
+</pre>
+
+</td>
+
+<td class="adv"></td>
+</tr>
+</table>
+
+<!-- **************************************************TABLE 22******************************************************************************************************-->
+
+<table width=100% cellspacing="5" id="dynamic_1d_calloc">
+<!--*********************ROW 1*************************************-->
+<tr>
+<td class="adv"></td>
+
+
+<td class="main">
+<h1 align="center"><u>Dynamic allocation of 1-D array using <code>calloc()</code></u></h1>
+<pre>
+<div class="codee">
+ <span class="preprocess">#include</span> <span class="text">&#60;stdio.h&#62;</span>
+ <span class="preprocess">#include</span> <span class="text">&#60;stdlib.h&#62;</span>
+
+ <span class="dtype">int</span> <span class="white"> main()</span>
+ <span class="white">{</span>
+  <span class="dtype">int</span> <span class="white">*ptr = NULL, i, n;</span>
+
+  <span class="white">printf(</span><span class="text">&#34;Enter the number of elements in your array: &#34;</span><span class="white">);</span>
+  <span class="white">scanf(</span><span class="text">&#34;</span><span class="textmodf">%d</span><span class="text">&#34;</span><span class="white">, &#38;n);
+
+  <span class="white">ptr = (</span><span class="dtype">int</span><span class="white">*)calloc(<span class="white">n, </span></span><span class="loop">sizeof</span><span class="white">(</span><span class="dtype">int</span><span class="white">));</span>
+
+  <span class="loop">if</span><span class="white">(ptr == NULL)</span>
+  <span class="white">{</span>
+   <span class="white">printf(</span><span class="text">&#34;Error: Could not allocate memory.&#34;</span><span class="white">);</span>
+   <span class="white">return</span> <span class="text">0</span><span class="white">;</span>
+   <span class="white">}</span>
+
+  <span class="loop">for</span><span class="white">(i = </span> <span class="text">0</span> <span class="white">; i &#60; </span> <span class="white">n</span><span class="white">; i++)</span>
+   <span class="white">scanf(</span><span class="text">&#34;</span><span class="textmodf">%d</span><span class="text">&#34;</span><span class="white">, ptr + i);
+
+  <span class="loop">for</span><span class="white">(i = </span> <span class="text">0</span> <span class="white">; i &#60; </span> <span class="white">n</span><span class="white">; i++)</span>
+   <span class="white">printf(</span> <span class="text">&#34;</span> <span class="textmodf">%d</span> <span class="text">&#34;</span><span class="white">, *(ptr + i));</span>
+
+  <span class="white">free(ptr);</span>
+  <span class="white">return</span> <span class="text">0</span><span class="white">;</span>
+  <span class="white">}</span>
+
+</div>
+</pre>
+
+<h3><u>Output</u></h3>
+<pre>
+<div class="codee"><span class="white">
+ Enter the number of elements in your array: 3
+
+ 1
+ 3
+ 2
+ 
+ 1 3 2
+</span>
+</div>
+</pre>
+
+
+
+</td>
+
+<td class="adv"></td>
+</tr>
+</table>
+
+<!-- **************************************************TABLE 23******************************************************************************************************-->
+
+<table width=100% cellspacing="5" id="dynamic_1d_realloc">
+<!--*********************ROW 1*************************************-->
+<tr>
+<td class="adv"></td>
+
+
+<td class="main">
+<h1 align="center"><u>Dynamic re-allocation of 1-D array using <code>realloc()</code></u></h1>
+<p><center><i>Before using re-alloc, you should have prior knowledge of using <code><b>malloc()</b></code> or <code><b>calloc()</b></code></i></center></p>
+<p><center><i><a href=#use_malloc>Click here</a> to learn how to use <code><b>malloc()</b></code></i></center></p>
+<p><center><i><a href=#dynamic_1d_calloc>Click here</a> to learn how to use <code><b>calloc()</b></code></i></center></p>
+<pre>
+<div class="codee">
+ <span class="preprocess">#include</span> <span class="text">&#60;stdio.h&#62;</span>
+ <span class="preprocess">#include</span> <span class="text">&#60;stdlib.h&#62;</span>
+
+ <span class="dtype">int</span> <span class="white"> main()</span>
+ <span class="white">{</span>
+  <span class="dtype">int</span> <span class="white">*ptr = NULL, i, n, m;</span>
+
+  <span class="white">printf(</span><span class="text">&#34;Enter the number of elements in your array: &#34;</span><span class="white">);</span>
+  <span class="white">scanf(</span><span class="text">&#34;</span><span class="textmodf">%d</span><span class="text">&#34;</span><span class="white">, &#38;n);
+
+      <span class="comment">/*Allocation of 1-D array*/</span>
+  <span class="white">ptr = (</span><span class="dtype">int</span><span class="white">*)calloc(<span class="white">n, </span></span><span class="loop">sizeof</span><span class="white">(</span><span class="dtype">int</span><span class="white">));</span>
+
+
+  <span class="loop">if</span><span class="white">(ptr == NULL)</span>
+  <span class="white">{</span>
+   <span class="white">printf(</span><span class="text">&#34;Error: Could not allocate memory.&#34;</span><span class="white">);</span>
+   <span class="white">return</span> <span class="text">0</span><span class="white">;</span>
+   <span class="white">}</span>
+
+      <span class="comment">/*Scanning elements of 1-D array*/</span>
+  <span class="loop">for</span><span class="white">(i = </span> <span class="text">0</span> <span class="white">; i &#60; </span> <span class="white">n</span><span class="white">; i++)</span>
+   <span class="white">scanf(</span><span class="text">&#34;</span><span class="textmodf">%d</span><span class="text">&#34;</span><span class="white">, ptr + i);
+
+      <span class="comment">/*Printing elements of 1-D array*/</span>
+  <span class="loop">for</span><span class="white">(i = </span> <span class="text">0</span> <span class="white">; i &#60; </span> <span class="white">n</span><span class="white">; i++)</span>
+   <span class="white">printf(</span> <span class="text">&#34;</span> <span class="textmodf">%d</span> <span class="text">&#34;</span><span class="white">, *(ptr + i));</span>
+
+  <span class="white">printf(</span><span class="text">&#34;Enter the number of elements in your new array: &#34;</span><span class="white">);</span>
+  <span class="white">scanf(</span><span class="text">&#34;</span><span class="textmodf">%d</span><span class="text">&#34;</span><span class="white">, &#38;m);
+
+      <span class="comment">/*Re-allocation of 1-D array*/</span>
+  <span class="white">ptr = (</span><span class="dtype">int</span><span class="white">*)realloc(<span class="white">ptr, </span></span><span class="loop">sizeof</span><span class="white">(</span><span class="dtype">int</span><span class="white">) * m);</span>
+
+
+  <span class="loop">if</span><span class="white">(ptr == NULL)</span>
+  <span class="white">{</span>
+   <span class="white">printf(</span><span class="text">&#34;Error: Could not allocate memory.&#34;</span><span class="white">);</span>
+   <span class="white">return</span> <span class="text">0</span><span class="white">;</span>
+   <span class="white">}</span>
+
+  <span class="loop">if</span><span class="white">(m &#60; n)</span>
+  <span class="white">{</span>
+   <span class="white">printf(</span><span class="text">&#34;</span><span class="textmodf">\n</span><span class="text">Your reduced array.&#34;</span><span class="white">);</span>
+   <span class="loop">for</span><span class="white">(i = </span> <span class="text">0</span> <span class="white">; i &#60; </span> <span class="white">m</span><span class="white">; i++)</span>
+   <span class="white">printf(</span> <span class="text">&#34;</span> <span class="textmodf">\n%d</span> <span class="text">&#34;</span><span class="white">, *(ptr + i));</span>
+   <span class="white">}</span>
+
+  <span class="loop">else</span>
+  <span class="white">{</span>
+   <span class="white">printf(</span><span class="text">&#34;Elements present in your array.&#34;</span><span class="white">);</span>
+   <span class="loop">for</span><span class="white">(i = </span> <span class="text">0</span> <span class="white">; i &#60; </span> <span class="white">n</span><span class="white">; i++)</span>
+   <span class="white">printf(</span> <span class="text">&#34;</span><span class="textmodf">\n%d</span><span class="text">&#34;</span><span class="white">, *(ptr + i));</span>
+
+   <span class="white">printf(</span><span class="text">&#34;</span><span class="textmodf">\n</span><span class="text">Enter new elements.&#34;</span><span class="white">);</span>
+   <span class="loop">for</span><span class="white">( ; i &#60; </span> <span class="white">m</span><span class="white">; i++)</span>
+    <span class="white">scanf(</span><span class="text">&#34;</span><span class="textmodf">%d</span><span class="text">&#34;</span><span class="white">, ptr + i);
+
+   <span class="white">printf(</span><span class="text">&#34;</span><span class="textmodf">\n</span><span class="text">Your expanded array.&#34;</span><span class="white">);</span>
+   <span class="loop">for</span><span class="white">(i = </span> <span class="text">0</span> <span class="white">; i &#60; </span> <span class="white">m</:wspan><span class="white">; i++)</span>
+    <span class="white">printf(</span> <span class="text">&#34;</span> <span class="textmodf">\n%d</span> <span class="text">&#34;</span><span class="white">, *(ptr + i));</span>
+   <span class="white">}</span>
+
+  <span class="white">free(ptr);</span>
+  <span class="white">return</span> <span class="text">0</span><span class="white">;</span>
+  <span class="white">}</span>
+
+</div>
+</pre>
+
+<h3><u>Output:</u></h3>
+
+<pre>
+<div class="codee"><span class="white">
+ Enter the number of elements in your array: 4
+ 3
+ 4
+ 23
+ 5
+  3  4  23  5 Enter the number of elements in your new array: 3
+
+ Your reduced array. 
+ 3  
+ 4  
+ 23
+</span>
+</div>
+</pre>
+
+<h3><u>Output:</u></h3>
+
+<pre>
+<div class="codee"><span class="white">
+ Enter the number of elements in your array: 4
+ 32
+ 5
+ 56
+ 3
+  32  5  56  3 Enter the number of elements in your new array: 6
+ Elements present in your array.
+ 32
+ 5
+ 56
+ 3
+ Enter new elements.44
+ 3
+
+ Your expanded array. 
+ 32  
+ 5  
+ 56  
+ 3  
+ 44  
+ 3
+</span>
+</div>
+</pre>
+
+
+</td>
+
+<td class="adv"></td>
+</tr>
+</table>
+
+<!-- **************************************************TABLE 24******************************************************************************************************-->
+
+<table width=100% cellspacing="5" id="dynamic_2d">
+<!--*********************ROW 1*************************************-->
+<tr>
+<td class="adv"></td>
+
+
+<td class="main">
+<h1 align="center"><u>Dynamic Allocation of 2-D array</u></h1>
+<p><center><i>You are suggested to acquire prior knowledge of using <code><b>malloc()</b></code> or <code><b>calloc()</b></code></i></center></p>
+<p><center><i><a href=#use_malloc>Click here</a> to learn how to use <code><b>malloc()</b></code></i></center></p>
+<p><center><i><a href=#dynamic_1d_calloc>Click here</a> to learn how to use <code><b>calloc()</b></code></i></center></p>
+
+
+<p>The dynamically allocated 2-D array is very much different than static one. Implementing dynamic allocation of 2-D array or 3-D array etc., is more like playing with pointers. To do this it is required that you read everything taught above in this website. The dynamically allocated 2-D array is very much different than static one. Implementing dynamic allocation of 2-D array or 3-D array etc., is more like playing with pointers. To do this it is required that you read everything taught above in this website.</p>
+
+<h2><u>Pseudo code:</u></h2>
+<pre>
+<div class="codee"><span class="white">
+<span class="comment">/* Line 1*/</span> <span class="dtype">int </span> <span class="white">**ptr2 = NULL;</span>
+<span class="comment">/* Line 2*/</span> <span class="dtype">int </span> <span class="white">m;</span> <span class="comment">// number of rows</span>
+<span class="comment">/* Line 3*/</span> <span class="dtype">int </span> <span class="white">n;</span> <span class="comment">// number of columns</span>
+<span class="comment">/* Line 4*/</span> <span class="white">ptr2 = (</span><span class="dtype">int</span><span class="white">**)malloc(</span><span class="loop">sizeof</span><span class="white">(</span><span class="dtype">int</span><span class="white">*)* m);</span>
+<span class="comment">/* Line 5*/</span> <span class="loop">for</span><span class="white">(i = </span> <span class="text">0</span> <span class="white">; i &#60; </span> <span class="white">m</span><span class="white">; i++)</span>
+             <span class="white">ptr2[i] = (</span><span class="dtype">int</span><span class="white">*)malloc(</span><span class="loop">sizeof</span><span class="white">(</span><span class="dtype">int</span><span class="white">)* n);</span>
+</span>
+</div>
+</pre>
+
+<p>What happened?</p>
+<p>First, we declared double pointer, **ptr2.</p>
+<p>In line 3, we allocated a 1-D array with <b>&#39;m&#39;</b> elements and address of its first element is stored in <b>ptr2</b>. Now, the special thing is, each element of this 1-D array is an <b>integer-pointer</b>.</p>
+<p><span class="error"><b><u>Note:</u> We wrote <code><i>sizeof(int*)</i></code> not <code><i>sizeof(int)</i></code>, as both are not equal. We stated that we will discuss pointers using integers, but all the methods and algorithms are applicable on other data types too. So as we saw, we have to create an array, such that each element is a pointer, while calculating size, we should multiply <code><i>&#39;m&#39;</i></code> with size of a pointer. Thus, in case of characters too, while doing same step, <code><i>sizeof(char)</i></code> will not be equal to <code><i>sizeof(char*)</i></code>, and we want pointer array, so we will use <code><i>sizeof(char*)</i></code>.</b></span></p>
+<p>Now, in line 4, through loop, we created one 1-D array with <b>&#39;n&#39;</b> integer elements in one iteration. And address of first element is stored in <b>ptr2[i]</b> or <b>*(ptr2 + i)</b>. And we this for all possible values of <b>i</b>.</p>
+
+<h2>Let us assume <code>m = 3</code> and <code>n = 5</code></h2>
+<h3>Addresses written under pointer/ integer variable are hypothetical.</h3>
+<h3>Then the memory is allotted something like in this sequence.</h3>
+<div>
+<table cellspacing="0" align="center">
+
+<tr>
+<td class="diag" bgcolor="#F08080"></td>
+<td colspan="6">&nbsp;&nbsp;Pointer Variable.</td>
+</tr>
+
+
+<tr>
+<td colspan="7"></br></td>
+</tr>
+
+<tr>
+<td class="diag" bgcolor="#ADD8E6"></td>
+<td colspan="6">&nbsp;&nbsp;Integer Variable.</td>
+</tr>
+
+<tr>
+<td colspan="7"></br></td>
+</tr>
+
+<tr>
+<td colspan="7"></br></td>
+</tr>
+
+<tr>
+<td class="diag" bgcolor="#F08080"></td>
+<td style="font-size:2em;font-weight:bold;">&#8594;</td>
+<td class="diag" bgcolor="#ADD8E6"></td>
+<td class="diag" bgcolor="#ADD8E6"></td>
+<td class="diag" bgcolor="#ADD8E6"></td>
+<td class="diag" bgcolor="#ADD8E6"></td>
+<td class="diag" bgcolor="#ADD8E6"></td>
+</tr>
+
+<tr>
+<td class="diag">ptr2[0]</td>
+<td style="font-size:2em;font-weight:bold;"></td>
+<td class="diag">1000</td>
+<td class="diag">1004</td>
+<td class="diag">1008</td>
+<td class="diag">1012</td>
+<td class="diag">1016</td>
+</tr>
+
+<tr><td colspan="7"></td></tr>
+
+
+<tr>
+<td class="diag" bgcolor="#F08080"></td>
+<td style="font-size:2em;font-weight:bold;">&#8594;</td>
+<td class="diag" bgcolor="#ADD8E6"></td>
+<td class="diag" bgcolor="#ADD8E6"></td>
+<td class="diag" bgcolor="#ADD8E6"></td>
+<td class="diag" bgcolor="#ADD8E6"></td>
+<td class="diag" bgcolor="#ADD8E6"></td>
+
+</tr>
+
+<tr>
+<td class="diag">ptr2[1]</td>
+<td style="font-size:2em;font-weight:bold;"></td>
+<td class="diag">1020</td>
+<td class="diag">1024</td>
+<td class="diag">1028</td>
+<td class="diag">1032</td>
+<td class="diag">1036</td>
+</tr>
+
+<tr><td colspan="7"></td></tr>
+
+
+
+<tr>
+<td class="diag" bgcolor="#F08080"></td>
+<td style="font-size:2em;font-weight:bold;">&#8594;</td>
+<td class="diag" bgcolor="#ADD8E6"></td>
+<td class="diag" bgcolor="#ADD8E6"></td>
+<td class="diag" bgcolor="#ADD8E6"></td>
+<td class="diag" bgcolor="#ADD8E6"></td>
+<td class="diag" bgcolor="#ADD8E6"></td>
+</tr>
+
+<tr>
+<td class="diag">ptr2[2]</td>
+<td style="font-size:2em;font-weight:bold;"></td>
+<td class="diag">1040</td>
+<td class="diag">1044</td>
+<td class="diag">1048</td>
+<td class="diag">1052</td>
+<td class="diag">1056</td>
+</tr>
+
+</table>
+</div>
+
+<p>We know how 2-D stay is allocated on memory, so using pointers we tried to map something same.</p>
+<p>Thus to access <b>(i,j)<sup>th</sup></b> element, we first need to access i<sup>th</sup> row. Therefore, we do <b>*(ptr2 + i)</b>.</p>
+<p>Now to access <b>j<sup>th</sup></b> column of <b>i<sup>th</sup></b> row, we do <b>*(*(ptr2 +i) + j)</b>.</p>
+<p>Now we have seen earlier, </p>
+<p>&#60;<b><code>name</code>&#62;[i]</b> is evaluated as: <b>*(&#60;<code>name</code>&#62; + i)</b></p>
+<p>&#60;<b><code>name</code>&#62;[i][j]</b> is evaluated as: <b>*(*(&#60;<code>name</code>&#62; + i) + j)</b>.</p>
+<p>Thus for above pseudo code, the <b>(i,j)<sup>th</sup></b> element can be accessed through <b>ptr2[i][j]</b>.</p>
+
+<h3><u>Code:</u></h3>
+
+<pre>
+<div class="codee">
+ <span class="preprocess">#include</span> <span class="text">&#60;stdio.h&#62;</span>
+ <span class="preprocess">#include</span> <span class="text">&#60;stdlib.h&#62;</span>
+
+ <span class="dtype">int</span> <span class="white"> main()</span>
+ <span class="white">{</span>
+  <span class="dtype">int</span> <span class="white">**ptr2 = NULL, i, j;</span>
+  <span class="dtype">int</span> <span class="white">m = </span><span class="text">3</span><span class="white">, n = </span><span class="text">5</span><span class="white">;</span>
+
+  <span class="white">ptr2 = (</span><span class="dtype">int</span><span class="white">**)malloc(</span><span class="loop">sizeof</span><span class="white">(</span><span class="dtype">int</span><span class="white">*)* m);</span>
+
+  <span class="loop">if</span><span class="white">(ptr2 == NULL)</span>
+  <span class="white">{</span>
+   <span class="white">printf(</span><span class="text">&#34;Error: Could not allocate memory.&#34;</span><span class="white">);</span>
+   <span class="white">return</span> <span class="text">0</span><span class="white">;</span>
+   <span class="white">}</span>
+
+  <span class="loop">for</span><span class="white">(i = </span> <span class="text">0</span> <span class="white">; i &#60; </span> <span class="white">m</span><span class="white">; i++)</span>
+   <span class="white">ptr2[i] = (</span><span class="dtype">int</span><span class="white">*)malloc(</span><span class="loop">sizeof</span><span class="white">(</span><span class="dtype">int</span><span class="white">)* n);</span>
+
+  <span class="loop">for</span><span class="white">(i = </span> <span class="text">0</span> <span class="white">; i &#60; </span> <span class="white">m</span><span class="white">; i++)</span>
+   <span class="white">printf(</span> <span class="text">&#34;</span><span class="textmodf">\n</span><span class="text">Address of ptr2[</span><span class="textmodf">%d</span><span class="text">]: <span class="textmodf">%u</span>&#34;</span><span class="white">, i, &#38;ptr2[i]);</span>
+
+  <span class="loop">for</span><span class="white">(i = </span> <span class="text">0</span> <span class="white">; i &#60; </span> <span class="white">m</span><span class="white">; i++)</span>
+   <span class="loop">for</span><span class="white">(j = </span> <span class="text">0</span> <span class="white">; j &#60; </span> <span class="white">n</span><span class="white">; j++)</span>
+    <span class="white">printf(</span> <span class="text">&#34;</span><span class="textmodf">\n\t</span><span class="text">Address of ptr2[<span class="textmodf">%d</span><span class="text">][</span><span class="textmodf">%d</span><span class="text">]: <span class="textmodf">%u</span>&#34;</span><span class="white">, i, j, &#38;ptr2[i][j]);</span>
+
+  <span class="loop">for</span><span class="white">(i = </span> <span class="text">0</span> <span class="white">; i &#60; </span> <span class="white">m</span><span class="white">; i++)</span>
+   <span class="white">free(ptr2[i]);</span>
+
+
+  <span class="white">free(ptr2);</span>
+  <span class="white">return</span> <span class="text">0</span><span class="white">;</span>
+  <span class="white">}</span>
+
+</div>
+</pre>
+
+<h3><u>Output</u></h3>
+<pre>
+<div class="codee"><span class="white">
+ Address of ptr2[0]: 25141264
+ Address of ptr2[1]: 25141272
+ Address of ptr2[2]: 25141280
+ 	Address of ptr2[0][0]: 25141296
+ 	Address of ptr2[0][1]: 25141300
+ 	Address of ptr2[0][2]: 25141304
+ 	Address of ptr2[0][3]: 25141308
+ 	Address of ptr2[0][4]: 25141312
+ 	Address of ptr2[1][0]: 25141328
+ 	Address of ptr2[1][1]: 25141332
+	Address of ptr2[1][2]: 25141336
+ 	Address of ptr2[1][3]: 25141340
+ 	Address of ptr2[1][4]: 25141344
+	Address of ptr2[2][0]: 25141360
+ 	Address of ptr2[2][1]: 25141364
+ 	Address of ptr2[2][2]: 25141368
+ 	Address of ptr2[2][3]: 25141372
+       	Address of ptr2[2][4]: 25141376
+</span>
+</div>
+</pre>
+
+
+
+<div>
+<table cellspacing="0" align="center">
+<tr>
+<td class="diag" bgcolor="#F08080"></td>
+<td colspan="6">&nbsp;&nbsp;Pointer Variable.</td>
+</tr>
+
+
+<tr>
+<td colspan="7"></br></td>
+</tr>
+
+<tr>
+<td class="diag" bgcolor="#ADD8E6"></td>
+<td colspan="6">&nbsp;&nbsp;Integer Variable.</td>
+</tr>
+
+<tr>
+<td colspan="7"></br></td>
+</tr>
+
+<tr>
+<td colspan="7"></br></td>
+</tr>
+
+
+<tr>
+<td class="diag" bgcolor="#F08080"></td>
+<td style="font-size:2em;font-weight:bold;">&#8594;</td>
+<td class="diag" bgcolor="#ADD8E6"></td>
+<td class="diag" bgcolor="#ADD8E6"></td>
+<td class="diag" bgcolor="#ADD8E6"></td>
+<td class="diag" bgcolor="#ADD8E6"></td>
+<td class="diag" bgcolor="#ADD8E6"></td>
+</tr>
+
+<tr>
+<td class="diag">ptr2[0]</br></br>25141264</td>
+<td style="font-size:2em;font-weight:bold;"></td>
+<td class="diag">ptr2[0][0]</br></br>25141296</td>
+<td class="diag">ptr2[0][1]</br></br>25141300</td>
+<td class="diag">ptr2[0][2]</br></br>25141304</td>
+<td class="diag">ptr2[0][3]</br></br>25141308</td>
+<td class="diag">ptr2[0][4]</br></br>25141312</td>
+</tr>
+
+<tr><td colspan="7"></td></tr>
+
+<tr>
+<td class="diag" bgcolor="#F08080"></td>
+<td style="font-size:2em;font-weight:bold;">&#8594;</td>
+<td class="diag" bgcolor="#ADD8E6"></td>
+<td class="diag" bgcolor="#ADD8E6"></td>
+<td class="diag" bgcolor="#ADD8E6"></td>
+<td class="diag" bgcolor="#ADD8E6"></td>
+<td class="diag" bgcolor="#ADD8E6"></td>
+</tr>
+
+<tr>
+<td class="diag">ptr2[1]</br></br>25141272</td>
+<td style="font-size:2em;font-weight:bold;"></td>
+<td class="diag">ptr2[1][0]</br></br>25141328</td>
+<td class="diag">ptr2[1][1]</br></br>25141332</td>
+<td class="diag">ptr2[1][2]</br></br>25141336</td>
+<td class="diag">ptr2[1][3]</br></br>25141340</td>
+<td class="diag">ptr2[1][4]</br></br>25141344</td>
+</tr>
+
+<tr><td colspan="7"></td></tr>
+
+<tr>
+<td class="diag" bgcolor="#F08080"></td>
+<td style="font-size:2em;font-weight:bold;">&#8594;</td>
+<td class="diag" bgcolor="#ADD8E6"></td>
+<td class="diag" bgcolor="#ADD8E6"></td>
+<td class="diag" bgcolor="#ADD8E6"></td>
+<td class="diag" bgcolor="#ADD8E6"></td>
+<td class="diag" bgcolor="#ADD8E6"></td>
+</tr>
+
+<tr>
+<td class="diag">ptr2[2]</br></br>25141280</td>
+<td style="font-size:2em;font-weight:bold;"></td>
+<td class="diag">ptr2[2][0]</br></br>25141360</td>
+<td class="diag">ptr2[2][1]</br></br>25141364</td>
+<td class="diag">ptr2[2][2]</br></br>25141368</td>
+<td class="diag">ptr2[2][3]</br></br>25141372</td>
+<td class="diag">ptr2[2][4]</br></br>25141376</td>
+</tr>
+
+<tr><td colspan="7"></td></tr>
+</table>
+
+<h2><u>Observation</u></h2>
+<ol type="1">
+<li><p><b>ptr2=(int**)malloc(sizeof(int*)*m)</b>, 3 <b>int-pointer</b> blocks are allotted, and address of first block, 25141264, is given to <b>ptr2</b>.</p></li>
+<li><p>For <b>i = 0</b>, <b>ptr2[0]=(int*)malloc(sizeof(int)*n)</b>, 5 <b>int</b> blocks are allotted and address of first block, 25141296, is given to <b>ptr2[0]</b>. And same goes for <b>ptr2[1]</b> and <b>ptr[2]</b>.</p></li>
+
+</ol>
+
+
+
+
+</td>
+
+<td class="adv"></td>
+</tr>
+</table>
+
+<!-- **************************************************TABLE 25******************************************************************************************************-->
+
+<table width=100% cellspacing="5" id="NULL">
+<!--*********************ROW 1*************************************-->
+<tr>
+<td class="adv"></td>
+
+
+<td class="main">
+<h1 align="center"><u>Wild pointer and importnace of <code>NULL</code></u></h1>
+<p>NULL is a macro which has a pre-defined meaning and that is equal to &#39;0&#39;. In case if you treat it as an address and try to de-reference it, it will show error.</p>
+<p>Why?</p>
+<p>Addresses are integers, so they must be starting from &#39;0&#39;, somewhere in the memory. So why this error?</p>
+<p>NULL a defined value, but one that is defined by the environment to not be a valid address for any member or object. And in most of the cases, your operating system resides at the starting of the addresses of RAM (memory), so they make that addresses to be un-accessible.</p>
+<p>When you declare a pointer and keep it un-initialized, it is known as <b>wild</b> pointer. They contain some garbage (unexpected) value by default. So, if by-mistake, without initializing them, if you de-reference the value at that location and manipulate it, not knowing that, that particular memory could be in use by some other software which is running in background or maybe your OS is using it for storing temporary data, <span class="error"><b>you may crash the system.</b></span></p>
+
+<p>So, it is advised and also it is a good practice to initialize the pointer with <b>NULL</b>, so that by mistake if you dereference it, your code will show run-time error, without harming any data. Also, if you know you have stored NULL, you check the pointer before using it, to identify that whether the memory is allotted for your dynamic allocation or not or to avoid misbehavior due to logical error. This is because you know that if your pointer variable is not able to get initialized by some expected data, it will contain NULL, hence you can check it before using it and code safely.</p>
+</td>
+
+<td class="adv"></td>
+</tr>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

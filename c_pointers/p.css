@@ -1,0 +1,81 @@
+.main
+{
+ width: 64%;
+ background-color: #ffffff;
+ border-radius:25px;
+ border: 4px solid #2E3436; 
+ padding: 10px;
+ font-family: "Arial Black", Gadget, sans-serif;
+ font-style: normal;
+ font-size: 1em;
+ font-variant: normal;
+ font-weight: normal;
+ text-align: justify;
+}
+
+
+td.adv
+{
+ width: 16%;
+ border-radius: 10px;
+ border: 4px solid #32CD32;
+ }
+
+td.diag
+{
+ border: 2px solid #000000;
+ padding: 4px;
+ font-family: "Arial Black", Gadget, sans-serif;
+ font-style: normal;
+ font-size: 1em;
+ font-variant: normal;
+ font-weight: normal;
+ text-align: justify;
+ }
+
+.exam
+{
+ background-color:
+ }
+
+
+
+.codee
+{
+ background-color: #2E3436;
+ font-family: Courier New;
+ font-style: normal;
+ font-size: 1em;
+ font-variant: normal;
+ font-weight: normal;
+}
+
+.preprocess
+{color: #5fd7ff;}
+
+.text
+{color: #ad7fa8;}
+
+.dtype
+{color: #7bce89;}
+
+.loop
+{color: #fce94f;}
+
+.white
+{color: #ffffff;}
+
+.textmodf
+{color: #ffd7d7;}
+
+.comment
+{color: #34e2cb;}
+
+.uname
+{color: #8ae234;}
+
+.error
+{color: #ef2929;}
+
+.warn
+{color: #ad7fa8;}
