@@ -1207,7 +1207,7 @@ span.border.two:after {
 }
 /*-- footer --*/
 .footer {
-    background: url(../images/contact.jpeg) no-repeat center top;
+    background: #1D232F;
     background-size: cover;
     -webkit-background-size: cover;
     -moz-background-size: cover;
