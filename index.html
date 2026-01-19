@@ -59,7 +59,7 @@
                     class="shadow">
     <table style="background:#1b242f; width:100%">
       <tr>
-        <td width="100%" style="text-align: center;"><img class="shadow" style="border: #f2f2f2 solid 2px; width: 300px;" src="./images/img1.jpg"/></td>
+        <td width="100%" style="text-align: center;"><img class="shadow" style="border: #f2f2f2 solid 2px; width: 300px;" src="./images/img2.jpg"/></td>
       </tr>
     </table>
     <br/>
@@ -83,7 +83,7 @@
 
       <tr>
         <td style="padding:0.8%; border-bottom: #f2f2f2 solid 1px; width:50%; text-align:right; padding-right:2%; font-weight:bold;">Domain/ Area of Interest</td>
-        <td style="padding:0.8%; text-align:left; padding-left:2%;">OS and Kernels, drivers, and low level software.</td>
+        <td style="padding:0.8%; text-align:left; padding-left:2%;">Embedded, OS and Kernels, drivers, and low level software.</td>
       </tr>
 
       <tr>
@@ -93,7 +93,7 @@
 
       <tr>
         <td style="padding:0.8%; border-bottom: #f2f2f2 solid 1px; width:50%; text-align:right; padding-right:2%; font-weight:bold;">Address</td>
-        <td style="padding:0.8%; text-align:left; padding-left:2%;">Meyrin, Switzerland</td>
+        <td style="padding:0.8%; text-align:left; padding-left:2%;">Bern, Switzerland</td>
       </tr>
 
       <tr>
@@ -277,6 +277,7 @@
             <div class="shadow">Python</div>
             <div class="shadow">Shell scripting</div>
             <div class="shadow">Rust</div>
+            <div class="shadow">Zig</div>
           </div>
         </td>
       </tr>
@@ -406,6 +407,9 @@
                                        justify-content:center;">
             <div class="shadow">Raspberry Pi (Zero W and 3B+)</div>
             <div class="shadow">Pi Camera</div>
+            <div class="shadow">Beagle Bone Black</div>
+            <div class="shadow">STM32F103C8T6 - Blue Pill</div>
+            <div class="shadow">SBC: Alta AML-A311D-CC-V0.2</div>
             <div class="shadow">Arduino</div>
           </div>
         </td>
@@ -462,7 +466,7 @@
         <td style="width:100%;">
           <div class="shadow heading">
             <h1 style="font-weight:normal; padding:1%;">
-              Basic <span style="font-weight:bold">Knowledge of</span>
+              Foundational <span style="font-weight:bold">Knowledge of</span>
             </h1>
           </div>
 
@@ -478,7 +482,7 @@
                                        justify-content:center;">
             <div class="shadow">VME-Bus</div>
             <div class="shadow">Assembly (x86, ARM, RISC-V)</div>
-            <div class="shadow">Network Protocols</div>
+            <div class="shadow">Network Protocols and OSI layer</div>
             <div class="shadow">i2C</div>
             <div class="shadow">SPI</div>
             <div class="shadow">SSH</div>
@@ -577,12 +581,16 @@
               <p><b>Company: </b><a style="color:#f2f2f2;" href="https://www.speedgoat.com/" target="_blank">Speedgoat</a><br/><br/></p>
               <p><b>Responsibilities:</b>
                 <ul>
-                  <li>Designed a robust recovery image bootable from 64Mb NOR QSPI flash, using a read-only SquashFS rootfs with overlay support—enabling fallback boot and field recovery</li>
-                  <li>Streamlined third-party driver development by customizing Yocto build process to expose kernel development headers without full kernel source, enabling external suppliers to safely build modules.</li>
-                  <li>Implemented sysfs-based hardware abstraction to manipulate SoM-carrier interaction from Linux, enabling controlled power-delivery and EEPROM access. Empowered embedded product features from user space.</li>
-                  <li>Orchestrated system boot and shutdown behaviors via systemd for RTTM systems, including conditional display logic, MCU-triggered poweroff, and dynamic console management.</li>
+                  <li>Built a critical linux image, bootable from a 64-Mb NoR QSPI flash, to achieve on-field recovery of our Ultrascale + MPSoC based Real-Time. Integrated sysFs based rootfs for security; reducing image corruption risk.</li>
+                  <li>Facilitated knowledge transfer with external partners, ensuring in-house expertise on system performance optimization.</li>
+                  <li>Developed a kernel-level framework to allow data on on-board NVMEM chip to be accessible from userspace via sysFs entries, with the ability to reproduce the functionality for extension modules; removing 80% redundant code.</li>
+                  <li>Co-developed hardware abstraction layer; simplifying the SoM-Board Controller (MCU) interaction by 60%.</li>
+                  <li>Utilized systemd to orchestrate system boot and shutdown behaviors for RTTM systems, along with conditional display logic, MCU-triggered power-management, and dynamic console management.</li>
+                  <li>Led streamlining of third-party driver development by customizing Yocto build process to expose kernel development headers without full kernel source, enabling external suppliers to safely build modules.</li>
+                  <li>Fixed device listing algorithm in their C++ based library.</li>
                   <li>Customized real-time Linux kernel configs for target machines and supported cross-team integration efforts.</li>
                 </ul><br/>
+                Impact: Enabled sustainable field recovery, reduced external support friction, simplified code complexity, and streamlined integration of third-party drivers, improving the turnaround time of the supplier and the robustness of the platform.
               </p>
               <p><b>Links:</b>
                 <ul>
@@ -598,15 +606,18 @@
               <p>As a Linux Kernel Developer at CERN, I led a significant project to create a tailored Linux-based operating system for the machines that control various instruments around the Large Hadron Collider (LHC). My role encompassed diverse tasks, highlighting proficiency in various tools and technologies; most significant of them are:</p>
               <p><b>Responsibilities:</b>
                 <ul>
-                  <li>Successfully ported 30+ drivers from CentOS-7 (based on linux-v3.10) to vanilla linux-v5.10.192-rt92. Standardized their build and install procedures using Makefile and GNU recommendations, cleaned up the code, and implemented a Gitlab-based CI/CD pipeline for all drivers to streamline testing and deployment.</li>
-                  <li>Tested the ported drivers forPCI and VME devices, implemented feature requests like Hardware Monitoring (via Linux APIs), and resolved driver issues reported by users.</li>
-                  <li>Customized Linux kernel configuration file for CERN machines, ensuring performance and size.</li>
+                  <li>Ported 30+ device drivers from CentOS-7 (based on linux-v3.10) to v5.10.192-rt92 during major Linux infrastructure upgrade, affecting 2000 x86-64 embedded systems across LHC and accelerator facilities.</li>
+                  <li>Extracted these drivers from the legacy monolithic repository to their own newly-created individual repositories; streamlining their independent development, testing, and integration.</li>
+                  <li>Standardized the build and install procedures of drivers using Makefile and GNU recommendations, cleaned up the code, and implemented a Gitlab-based CI/CD pipeline for all drivers to streamline testing and deployment.</li>
+                  <li>Tested the ported drivers for PCI and VME devices, implemented feature requests like Hardware Monitoring (via Linux APIs), and resolved driver issues reported by users.</li>
+                  <li>Customized kernel configuration for CERN’s needs, ensuring performance + size; reduced build time to less than 10 mins.</li>
                   <li>Utilized Packer (with HCL config) to achieve automated building of CentOS-9 Stream and Alma-9 based root filesystems, and Dracut to build a kernel independent initramfs. Conducted the preliminary OS testing by employing QEMU, initializing boot processes through network booting sequence.</li>
                   <li>Configured U-Boot to load GRUB for arm64 machines to unify the booting process for x86_64 and aarch64.</li>
                   <li>Devised an automated build system (Makefile and Gitlab CI/CD) for custom kernels. This includes downloading sources, verifying GPG signatures, patching custom changes, building, testing, and releasing kernels seamlessly.</li>
-                  <li>Utilized Docker’s multi-stage feature to achieve complex but light weight images for CI/CD processes.</li>
+                  <li>Utilized Docker’s multi-stage feature to reduce the size of complex images by 51% for CI/CD processes.</li>
                   <li>Contributed to drivers’ test suite (pytest based), ensuring comprehensive testing.</li>
                 </ul><br/>
+                Impact: Modernize and maintain CERN’s embedded infrastructure; ensured smooth transition to newer kernels while boosting deployment speed and long-term maintainability.
               </p>
               <p><b>Links:</b>
                 <ul>
@@ -783,8 +794,8 @@
           <h2>RTEMS</h2>
           <ul>
             <li><a style="color:#f2f2f2;" href="https://en.wikipedia.org/wiki/RTEMS" target="_blank" class="read hvr-shutter-in-horizontal">RTEMS Wikipedia</a></li><br/>
-            <li><a style="color:#f2f2f2;" href="https://git.rtems.org/rtems/log/?qt=author&q=vaibhavgupta40%40gmail.com" target="_blank">My Contribution - In Kernel</a></li><br/>
-            <li><a style="color:#f2f2f2;" href="https://git.rtems.org/rtems-docs/log/?qt=author&q=vaibhavgupta40%40gmail.com" target="_blank">My Contribution - In Docs</a></li>
+            <li><a style="color:#f2f2f2;" href="https://gitlab.rtems.org/rtems/rtos/rtems/-/commits/main?author=vaibhavgupta40@gmail.com" target="_blank">My Contribution - In Kernel</a></li><br/>
+            <li><a style="color:#f2f2f2;" href="https://gitlab.rtems.org/rtems/docs/rtems-docs/-/commits/main?author=vaibhavgupta40@gmail.com" target="_blank">My Contribution - In Docs</a></li>
           </ul>
         </td>
       </tr>
@@ -797,7 +808,11 @@
           <h2>Newlib</h2>
           <ul>
             <li><a style="color:#f2f2f2;" href="https://en.wikipedia.org/wiki/Newlib" target="_blank" class="read hvr-shutter-in-horizontal">Newlib-Cygwin Wikipedia</a></li><br/>
-            <li><a style="color:#f2f2f2;" href="https://sourceware.org/git/?p=newlib-cygwin.git&a=search&h=HEAD&st=author&s=vaibhavgupta40%40gmail.com" target="_blank">My Contribution - In Master</a></li>
+            <li>My Contribution - In Master</li>
+              <ul>
+                <li><a style="color:#f2f2f2;" href="https://sourceware.org/git/?p=newlib-cygwin.git;a=commitdiff;h=b39cd00f07e8df11c5446fb35da490ef85f12821" target="_blank">Commit-1</a></li>
+                <li><a style="color:#f2f2f2;" href="https://sourceware.org/git/?p=newlib-cygwin.git;a=commitdiff;h=e50ad9fbdc5adfb5c13954a2798d1ea0ad53db34" target="_blank">Commit-2</a></li>
+              </ul>
           </ul>
         </td>
       </tr>
@@ -905,6 +920,20 @@
     </table>
 
     <table style="width:100%;" class="td_border">
+      <tr>
+        <td style="width:30%;">
+          <img src="./images/pr5.png"/>
+        </td>
+        <td style="padding:2%;">
+          <h2>Homeserver - DIY Computing Beast</h2>
+          <p>
+            As a Linux contributor, I compile kernel drivers a lot. Sometimes I just need to build a single driver or subsystem, but whenever my changes could affect performance across components, a full kernel build can’t be avoided.
+            So, I decided to build what I call my Home-Server, though in truth, it’s my personal remote compile farm. It hosts a Nextcloud VM with storage provided with TrueNAS-Scale VM (draid3) over NFS. Implemented Jump-Server using a SBC for security and global access.
+          </p>
+					<a href="https://medium.com/@varodek/diy-computing-beast-my-journey-through-hardware-vms-containers-and-nas-546b710923a7" target="_blank">Blog</a>
+        </td>
+      </tr>
+
       <tr>
         <td style="width:30%;">
           <img src="./images/pr1.png"/>
@@ -1068,6 +1097,21 @@
     <table style="width:100%;
                   margin-bottom:6%;"
            class="td_border">
+
+      <tr>
+        <td style="width:30%;">
+          <img src="./images/b16.png"/>
+        </td>
+        <td style="padding:2%;">
+          <h2>DIY Computing Beast: A Journey Through Hardware, VMs, Containers, and NAS</h2>
+          <p>
+            As a Linux contributor, I compile kernel drivers a lot. Sometimes I just need to build a single driver or subsystem, but whenever my changes could affect performance across components, a full kernel build can’t be avoided.
+            So, I decided to build what I call my Home-Server, though in truth, it’s my personal remote compile farm. It hosts a Nextcloud VM with storage provided with TrueNAS-Scale VM (draid3) over NFS. Implemented Jump-Server using a SBC for security and global access.
+          </p>
+          <a href="https://medium.com/@varodek/diy-computing-beast-my-journey-through-hardware-vms-containers-and-nas-546b710923a7" target="_blank">Read More</a>
+        </td>
+      </tr>
+
       <tr>
         <td style="width:30%;">
           <img src="./images/b15.jpg"/>
